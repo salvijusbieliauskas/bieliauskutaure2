@@ -1,4 +1,4 @@
 main: live.btaure.bieliauskutaure2.BieliauskuTaure2
 version: 1.0
 name: 'MCBieliauskuTaure2'
-api-version: '1.17'
+api-version: '1.16'
