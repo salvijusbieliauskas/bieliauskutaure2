@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class BieliauskuTaure2 extends JavaPlugin {
     @Override
     public void onEnable() {
-        getLogger().info("prasideda.");
+        getLogger().info("pasibaigia.");
     }
     @Override
     public void onDisable() {
