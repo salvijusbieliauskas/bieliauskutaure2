@@ -4,10 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Initial commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Changed version to 1.16.5">
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/Minigame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/MinigameManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/Parkour.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/AddModeType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +57,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.25632185&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
@@ -92,7 +106,15 @@
       <workItem from="1669727120925" duration="2287000" />
       <workItem from="1669747984471" duration="1797000" />
       <workItem from="1669749794454" duration="311000" />
-      <workItem from="1669750131992" duration="164000" />
+      <workItem from="1669750131992" duration="4860000" />
+      <workItem from="1669868187841" duration="6950000" />
+      <workItem from="1669915990894" duration="4104000" />
+      <workItem from="1669928682963" duration="82000" />
+      <workItem from="1669950248850" duration="8558000" />
+      <workItem from="1669964889206" duration="14181000" />
+      <workItem from="1669981649243" duration="3074000" />
+      <workItem from="1669993431505" duration="6701000" />
+      <workItem from="1670022431599" duration="2495000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1669662483459</created>
@@ -101,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669662483459</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Changed version to 1.16.5">
+      <created>1669750525620</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669750525620</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +153,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <MESSAGE value="Changed version to 1.16.5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed version to 1.16.5" />
   </component>
 </project>
