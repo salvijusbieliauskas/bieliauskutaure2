@@ -14,8 +14,8 @@ import java.util.UUID;
 @SerializableAs("Administrator")
 public class Administrator extends BTPlayer {
     private int debugMessagesLevel;
-    public Administrator(UUID playerID, int debugLevel) {
-        super(playerID);
+    public Administrator(UUID playerID, BTTeam team, int debugLevel) {
+        super(playerID,team);
         this.debugMessagesLevel = debugLevel;
     }
     public int getDebugMessagesLevel()
@@ -38,12 +38,13 @@ public class Administrator extends BTPlayer {
     //<editor-fold desc="Serialization">
     public Administrator(Map<String,Object> map)
     {
-        this(UUID.fromString((String) map.get("UUID")),Integer.parseInt((String)map.get("debugLevel")));
+        this(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"),Integer.parseInt((String)map.get("debugLevel")));
     }
     @Override
     public @NotNull Map<String, Object> serialize() {
         Map<String,Object> map = new HashMap<>();
         map.put("UUID",super.getID().toString());
+        map.put("team",super.getTeam());
         map.put("debugLevel",String.valueOf(this.debugMessagesLevel));
         return map;
     }

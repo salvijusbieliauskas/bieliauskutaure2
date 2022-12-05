@@ -16,9 +16,9 @@ import java.util.UUID;
 @SerializableAs("Spectator")
 public class Spectator extends BTPlayer
 {
-    public Spectator(UUID playerID)
+    public Spectator(UUID playerID,BTTeam team)
     {
-        super(playerID);
+        super(playerID,team);
     }
 
     @Override
@@ -29,13 +29,14 @@ public class Spectator extends BTPlayer
     //<editor-fold desc="Serialization">
     public Spectator(Map<String,Object> map)
     {
-        super(UUID.fromString((String) map.get("UUID")));
+        super(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"));
     }
     @Override
     public @NotNull Map<String, Object> serialize()
     {
         Map<String,Object> map = new HashMap<>();
         map.put("UUID",super.getID().toString());
+        map.put("team",super.getTeam());
         return map;
     }
 

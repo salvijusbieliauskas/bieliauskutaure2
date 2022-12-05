@@ -13,16 +13,21 @@ public abstract class BTPlayer implements ConfigurationSerializable {
 
     private OfflinePlayer player;
 
-    public BTPlayer(UUID playerID)
+    public BTPlayer(UUID playerID, BTTeam team)
     {
         this.player = Bukkit.getOfflinePlayer(playerID);
+        this.team = team;
     }
 
     public OfflinePlayer getOfflinePlayer()
     {
         return player;
     }
-
+    private BTTeam team = null;
+    public BTTeam getTeam()
+    {
+        return team;
+    }
     /**
      * @return java.util.UUID of the associated player
      */

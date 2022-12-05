@@ -2,8 +2,6 @@ package live.btaure.bieliauskutaure2;
 
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
 import live.btaure.bieliauskutaure2.Participants.BTTeam;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +9,18 @@ import java.util.List;
 public class ConfigManager
 {
     private BieliauskuTaure2 plugin;
-    public ConfigManager(BieliauskuTaure2 mainPlugin)
+    private static ConfigManager configManagerInstance  = null;
+    private ConfigManager()
     {
-        this.plugin = mainPlugin;
+        plugin = BieliauskuTaure2.getPlugin(BieliauskuTaure2.class);
+    }
+    public static ConfigManager getInstance()
+    {
+        if(configManagerInstance == null)
+        {
+            configManagerInstance = new ConfigManager();
+        }
+        return configManagerInstance;
     }
     public List<BTTeam> getTeams() //TODO:isitikinti kad sitas(ir kitas get) ass metodas nethrowins exception
     {
@@ -27,12 +34,12 @@ public class ConfigManager
         plugin.saveConfig();
         Logger.info("Configuration updated and saved");
     }
-    public List<BTPlayer> getNonParticipants()
+    public List<BTPlayer> getBTPlayers()
     {
         Object obj = plugin.getConfig().get("nonParticipants");
         if(obj == null)
             return new ArrayList<BTPlayer>();
-        return (List<BTPlayer>) plugin.getConfig().get("nonParticipants");
+        return (List<BTPlayer>) plugin.getConfig().get("getBTPlayer");
     }
     public void setTeams(List<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
     {

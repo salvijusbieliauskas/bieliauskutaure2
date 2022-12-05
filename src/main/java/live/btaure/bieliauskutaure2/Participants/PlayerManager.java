@@ -12,29 +12,32 @@ import java.util.UUID;
  */
 public class PlayerManager//TOOD:pertvarkyti teamu struktura
 {
-    private List<BTPlayer> nonParticipants = new ArrayList<BTPlayer>();//contains only spectators, admins and broadcasters
+    private List<BTPlayer> BTPlayers = new ArrayList<BTPlayer>();//contains all players
     private List<BTTeam> BTTeams = new ArrayList<BTTeam>();//contains teams which contain participants
-    private final ConfigManager configManager;
+    private static PlayerManager playerManagerInstance = null;
 
-    /**
-     * constructor
-     * @param configManager ConfigManager instance that is used to load and save player data
-     */
-    public PlayerManager(ConfigManager configManager)
+    public static PlayerManager getInstance()
     {
-        this.configManager = configManager;
-        this.nonParticipants = loadNonParticipants();
+        if(playerManagerInstance == null)
+        {
+            playerManagerInstance = new PlayerManager();
+        }
+        return playerManagerInstance;
+    }
+    private PlayerManager()
+    {
+        this.BTPlayers = loadBTPlayers();
         this.BTTeams = loadTeams();
         Logger.info("Teams and non-participants have been loaded from config");
     }
 
     /**
-     * Gets and returns non-participants from the plugin configuration
-     * @return a list of all registered non-participants within the configuration
+     * Gets and returns player from the plugin configuration
+     * @return a list of all registered player within the configuration
      */
-    private List<BTPlayer> loadNonParticipants()
+    private List<BTPlayer> loadBTPlayers()
     {
-        return configManager.getNonParticipants();
+        return ConfigManager.getInstance().getBTPlayers();
     }
 
     /**
@@ -43,18 +46,18 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      */
     private List<BTTeam> loadTeams()
     {
-        return configManager.getTeams();
+        return ConfigManager.getInstance().getTeams();
     }
 
     /**
-     * Reloads the config manager, applying changes made to the config file externally and reloads team and non-participant information from it.
+     * Reloads the config manager, applying changes made to the config file externally and reloads team and player information from it.
      */
     public void reload()
     {
-        configManager.reload();
-        this.nonParticipants = loadNonParticipants();
+        ConfigManager.getInstance().reload();
+        this.BTPlayers = loadBTPlayers();
         this.BTTeams = loadTeams();
-        Logger.info("Teams and non-participants have been loaded from config");
+        Logger.info("Teams and player have been loaded from config");
     }
 
     /**
@@ -62,7 +65,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      * @param index index of the team to find
      * @return the team at the index provided
      */
-    public BTTeam getBTTeam(int index)
+    public BTTeam getTeam(int index)
     {
         return BTTeams.get(index);
     }
@@ -71,7 +74,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      * @param ID UUID of the team to find
      * @return the matching BTTeam or null if one is not found
      */
-    public BTTeam getBTTeam(UUID ID)
+    public BTTeam getTeam(UUID ID)
     {
         int index = findTeam(ID);
         if(index == -1)
@@ -79,35 +82,51 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         return BTTeams.get(index);
     }
 
+
     /**
-     * Gets and returns a non-participant by his ID
-     * @param ID UUID of the non-participant to find
-     * @return a BTPlayer instance of matching non-participant. null if not found
+     * Gets a team by its name.
+     * Should only be used when UUID is unknown.
+     * Does not always require an exact name, only a part of it.
+     * @param name name of the team to find
+     * @return BTTeam instance reference or null if a team wasn't found
      */
-    public BTPlayer getNonParticipant(UUID ID)
+    public BTTeam getTeam(String name)
     {
-        int index = findNonParticipant(ID);
-        if(index == -1)
-            return null;
-        return nonParticipants.get(index);
+        int index = findTeam(name);
+        if(index > -1)
+            return BTTeams.get(index);
+        return null;
     }
 
     /**
-     * Gets and returns a non-participant by his index within the manager
-     * @param index index of the non-participant to get
-     * @return BTPlayer of non-participant at the given index
+     * Gets and returns a player by his ID
+     * @param ID UUID of the player to find
+     * @return a BTPlayer instance of matching player. null if not found
      */
-    public BTPlayer getNonParticipant(int index)
+    public BTPlayer getBTPlayer(UUID ID)
     {
-        return nonParticipants.get(index);
+        int index = findBTPlayer(ID);
+        if(index == -1)
+            return null;
+        return getBTPlayer(index);
+    }
+
+    /**
+     * Gets and returns a player by his index within the manager
+     * @param index index of the non-participant to get
+     * @return BTPlayer player at the given index
+     */
+    public BTPlayer getBTPlayer(int index)
+    {
+        return BTPlayers.get(index);
     }
 
     /**
      * @return the count of registered players that are not participants
      */
-    public int getNonParticipantCount()
+    public int getBTPlayer()
     {
-        return nonParticipants.size();
+        return BTPlayers.size();
     }
 
     /**
@@ -120,36 +139,36 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
 
 
     /**
-     * Finds the index of a non-participant player by his UUID.
-     * @param ID UUID of the non-participant to find
+     * Finds the index of a player by his UUID.
+     * @param ID UUID of the player to find
      * @return the index of the player within the manager or -1 if no player was found
      */
-    private int findNonParticipant(UUID ID)
+    private int findBTPlayer(UUID ID)
     {
-        for(int x = 0; x < nonParticipants.size(); x++)
+        for(int x = 0; x < BTPlayers.size(); x++)
         {
-            if(nonParticipants.get(x).getID().equals(ID))
+            if(BTPlayers.get(x).getID().equals(ID))
                 return x;
         }
         return -1;
     }
 
     /**
-     * Finds a non-participant player by his name.
+     * Finds a player by his name.
      * Should only be used when UUID is unknown.
      * Does not always require an exact name, only a part of it.
      * @param name name of the player to find
-     * @return index of the non-participant that was found. -1 if there were no matches,
+     * @return index of the player that was found. -1 if there were no matches,
      * -2 if there were several possible players with this name and the name parameter was not a perfect match with any of them
      */
-    public int findNonParticipant(String name)//HAHAHAHAHA SITAS METODAS as netikiu kad nera geresnio budo sita padaryt
+    private int findBTPlayer(String name)//HAHAHAHAHA SITAS METODAS as netikiu kad nera geresnio budo sita padaryt
     {
         List<Integer> indexes = new ArrayList<Integer>();
-        for(int x = 0; x < nonParticipants.size(); x++)//checks if any of the players are an exact match
+        for(int x = 0; x < BTPlayers.size(); x++)//checks if any of the players are an exact match
         {
-            if(nonParticipants.get(x).getName().equals(name))
+            if(BTPlayers.get(x).getName().equals(name))
                 return x;
-            if(nonParticipants.get(x).getName().toLowerCase().contains(name.toLowerCase()))
+            if(BTPlayers.get(x).getName().toLowerCase().contains(name.toLowerCase()))
                 indexes.add(x);
         }
         if(indexes.size()==0)
@@ -159,7 +178,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         List<Integer> indexes1 = new ArrayList<Integer>();
         //checks if any of the players that weren't an exact match, are a match if case is ignored
         for (Integer index : indexes) {
-            if (nonParticipants.get(index).getName().toLowerCase().equals(name.toLowerCase()))
+            if (BTPlayers.get(index).getName().toLowerCase().equals(name.toLowerCase()))
                 indexes1.add(index);
         }
         if(indexes1.size()==1)//checks if there was only one match(minecraft names are case-sensitive and there can unironically be two people on the server who have the names "person" and "persOn")
@@ -187,7 +206,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      * @param name name of the team to find
      * @return index of the team that was found. -1 if there were no matches, -2 if there were several possible teams with this name and the name parameter was not a perfect match with any of them
      */
-    public int findTeam(String name)//as cba
+    private int findTeam(String name)//as cba
     {
         List<Integer> indexes = new ArrayList<Integer>();
         for(int x = 0; x < BTTeams.size(); x++)
@@ -210,83 +229,23 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             return indexes1.get(0);
         return -2;
     }
-    public ParticipantIndex findParticipant(String name)//kaip tai sugeba blogeti
-    {
-        List<ParticipantIndex> indexes = new ArrayList<ParticipantIndex>();
-        for(int x = 0; x < BTTeams.size(); x++)
-        {
-            for(int y = 0; y < BTTeams.get(x).getMemberCount();y++)
-            {
-                if(BTTeams.get(x).getMember(y).getName().equals(name))
-                    return new ParticipantIndex(x,y);
-                if(BTTeams.get(x).getMember(y).getName().toLowerCase().contains(name.toLowerCase()))
-                    indexes.add(new ParticipantIndex(x,y));
-            }
-        }
-        if(indexes.size()==0)
-            return new ParticipantIndex(-1,-1);
-        if(indexes.size()==1)
-            return indexes.get(0);
-        List<ParticipantIndex> indexes1 = new ArrayList<ParticipantIndex>();
-        for (ParticipantIndex index : indexes) {
-            if (BTTeams.get(index.getTeamIndex()).getMember(index.getPlayerIndex()).getName().toLowerCase().equals(name.toLowerCase()))
-                indexes1.add(index);
-        }
-        if(indexes1.size()==1)
-            return indexes1.get(0);
-        return new ParticipantIndex(-2,-2);
-    }
-    public ParticipantIndex findParticipant(UUID ID)
-    {
-        for(int x = 0; x < BTTeams.size();x++)
-        {
-            for(int y = 0; y < BTTeams.get(x).getMemberCount();y++)
-            {
-                if(BTTeams.get(x).getMember(y).getID().equals(ID))
-                    return new ParticipantIndex(x,y);
-            }
-        }
-        return new ParticipantIndex(-1,-1);
-    }
-    private BTPlayer getParticipant(ParticipantIndex result)
-    {
-        return BTTeams.get(result.getTeamIndex()).getMember(result.getPlayerIndex());
-    }
-    public BTPlayer getParticipant(UUID ID)
-    {
-        ParticipantIndex searchResult = findParticipant(ID);
-        if(searchResult.searchSuccess())
-            return getParticipant(searchResult);
-        return null;
-    }
-
-    /**
-     * niekada nenaudokit sito method maldauju jis sulauzo serveri
-     */
-    public BTPlayer getParticipant(String name)
-    {
-        ParticipantIndex searchResult = findParticipant(name);
-        if(searchResult.searchSuccess())
-            return getParticipant(searchResult);
-        return null;
-    }
     public void removeTeam(int index)
     {
         BTTeams.remove(index);
         Logger.warning("A team was removed. The members will become spectators.");
         //TODO:make people with no teams into spectators(either manually here or implement this as a part of a timer that checks if there are people in the server that are not registered within the manager)
     }
-    public void removeNonParticipant(int index)
+    public void removePlayer(int index)
     {
-        nonParticipants.remove(index);
-        Logger.warning("A non-participant was removed. Doing this might cause issues and a role change is recommended instead.");
+        BTPlayers.remove(index);
+        Logger.warning("A player was removed. Doing this might cause issues and a role change is recommended instead.");
     }
 
     /**
      * Checks if all teams have a valid number of players
      * @return true if all teams have a valid number of players, false otherwise
      */
-    public boolean validateTeamsSize()
+    /*public boolean validateTeamsSize()
     {
         List<BTTeam> invalidTeams = new ArrayList<BTTeam>();
         for(BTTeam team : BTTeams)
@@ -305,7 +264,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             message.append(team.toString()).append('\n');
         Logger.error(message.toString().trim());
         return false;
-    }
+    }*/
 
     /**
      * Checks if a player with the given UUID exists in this manager
@@ -314,23 +273,23 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      */
     public boolean exists(UUID ID)
     {
-        return getParticipant(ID) != null || getNonParticipant(ID) != null;
+        return getBTPlayer(ID) != null;
     }
-    public boolean addNonParticipant(BTPlayer player, AddModeType addMode)//TODO:implement functionality for AddMode.REPLACE
+    public boolean addBTPlayer(BTPlayer player, AddModeType addMode)//TODO:implement functionality for AddMode.REPLACE
     {
         if(addMode.equals(AddModeType.CHECK))
         {
            if(exists(player.getID()))
                return false;
-           nonParticipants.add(player);
-           Logger.info(String.format("A new non-participant has been registered: %s",player.toString()));
-           configManager.setNonParticipants(nonParticipants);
+           BTPlayers.add(player);
+           Logger.info(String.format("A new player has been registered: %s",player.toString()));
+           ConfigManager.getInstance().setNonParticipants(BTPlayers);
            return true;
         }
         else if(addMode.equals(AddModeType.FORCE)) {
-            nonParticipants.add(player);
-            Logger.warning(String.format("A new non-participant has been registered without checking if he already exists: %s", player.toString()));
-            configManager.setNonParticipants(nonParticipants);
+            BTPlayers.add(player);
+            Logger.warning(String.format("A new player has been registered without checking if he already exists: %s", player.toString()));
+            ConfigManager.getInstance().setNonParticipants(BTPlayers);
             return true;
         }
         else if(addMode.equals(AddModeType.REPLACE)){
@@ -345,17 +304,17 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      */
     public void removeAll(UUID id)
     {
-        int nonParticipantIndex = findNonParticipant(id);
+        int nonParticipantIndex = this.findBTPlayer(id);
         while(nonParticipantIndex != -1)
         {
-            removeNonParticipant(nonParticipantIndex);
-            nonParticipantIndex = findNonParticipant(id);
+            removePlayer(nonParticipantIndex);
+            nonParticipantIndex = this.findBTPlayer(id);
         }
         //unfinished, remove from teams as well
     }
     public void broadcastDebug(String message, int level)
     {
-        for(BTPlayer player : nonParticipants)
+        for(BTPlayer player : BTPlayers)
         {
             if(!(player instanceof Administrator))
                 continue;
@@ -365,6 +324,11 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                 player.getOfflinePlayer().getPlayer().sendMessage(message);
         }
     }
+    public void addTeam(BTTeam teamToAdd)
+    {
+        BTTeams.add(teamToAdd);
+    }
+
 }
 
 class ParticipantIndex//cia taip blogai

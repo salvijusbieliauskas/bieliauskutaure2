@@ -9,7 +9,6 @@ import java.util.logging.Level;
 public class Logger
 {
     public static final String prefix = "[MCBieliauskuTaure2] ";
-    public static PlayerManager playerManager = null;
 //TODO:send administrators who have enabled debug logging debug messages
     /**
      * Logs a warning to the server console (and administrators who have chosen to enable debug msesages), indicating that something could be wrong
@@ -18,8 +17,8 @@ public class Logger
     public static void warning(String message)
     {
         Bukkit.getLogger().log(Level.WARNING,prefix+message);
-        if(playerManager!=null)
-            playerManager.broadcastDebug(ChatColor.YELLOW+prefix+message,2);
+        if(PlayerManager.getInstance()!=null)
+            PlayerManager.getInstance().broadcastDebug(ChatColor.YELLOW+prefix+message,2);
     }
 
     /**
@@ -29,8 +28,8 @@ public class Logger
     public static void error(String message)
     {
         Bukkit.getLogger().log(Level.SEVERE,prefix+message);
-        if(playerManager!=null)
-            playerManager.broadcastDebug(ChatColor.DARK_RED+prefix+message,3);
+        if(PlayerManager.getInstance()!=null)
+            PlayerManager.getInstance().broadcastDebug(ChatColor.DARK_RED+prefix+message,3);
     }
 
     /**
@@ -40,8 +39,8 @@ public class Logger
     public static void info(String message)
     {
         Bukkit.getLogger().log(Level.INFO, prefix+message);
-        if(playerManager!=null)
-            playerManager.broadcastDebug(prefix+message,1);
+        if(PlayerManager.getInstance()!=null)
+            PlayerManager.getInstance().broadcastDebug(prefix+message,1);
     }
 
     /**
@@ -51,7 +50,7 @@ public class Logger
     public static void success(String message)
     {
         Bukkit.getLogger().log(Level.INFO, ChatColor.GREEN+prefix+message);
-        if(playerManager!=null)
-            playerManager.broadcastDebug(ChatColor.GREEN+prefix+message,0);
+        if(PlayerManager.getInstance()!=null)
+            PlayerManager.getInstance().broadcastDebug(ChatColor.GREEN+prefix+message,0);
     }
 }

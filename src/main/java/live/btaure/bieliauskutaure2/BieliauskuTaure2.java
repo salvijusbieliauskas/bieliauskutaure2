@@ -15,9 +15,6 @@ public class BieliauskuTaure2 extends JavaPlugin {
     public void onEnable()
     {
         registerSerialization();
-        configManager = new ConfigManager(this);
-        playerManager = new PlayerManager(configManager);
-        Logger.playerManager = playerManager;//TODO:cia scuffed
         registerCommands();
         registerGlobalListeners();
         Logger.success("prisitriedziau ziauriai(plugin uzsikro ve)");

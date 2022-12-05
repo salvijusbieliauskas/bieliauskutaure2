@@ -16,6 +16,6 @@ public class GlobalJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerLoginEvent event)
     {
-        playerManager.addNonParticipant(new Spectator(event.getPlayer().getUniqueId()), AddModeType.CHECK);
+        playerManager.addBTPlayer(new Spectator(event.getPlayer().getUniqueId(),null), AddModeType.CHECK);
     }
 }

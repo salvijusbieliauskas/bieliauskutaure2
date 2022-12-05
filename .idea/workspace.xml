@@ -4,24 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Changed version to 1.16.5">
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/Minigame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/MinigameManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Minigames/Parkour.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/AddModeType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" afterDir="false" />
+    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Added some basic, unfinished infrastructure">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,6 +110,10 @@
       <workItem from="1669981649243" duration="3074000" />
       <workItem from="1669993431505" duration="6701000" />
       <workItem from="1670022431599" duration="2495000" />
+      <workItem from="1670087525754" duration="145000" />
+      <workItem from="1670194905028" duration="30000" />
+      <workItem from="1670252499920" duration="486000" />
+      <workItem from="1670254166960" duration="2586000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1669662483459</created>
@@ -130,7 +129,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669750525620</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added some basic, unfinished infrastructure">
+      <created>1670087579664</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1670087579664</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,6 +160,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Changed version to 1.16.5" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed version to 1.16.5" />
+    <MESSAGE value="Added some basic, unfinished infrastructure" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some basic, unfinished infrastructure" />
   </component>
 </project>
