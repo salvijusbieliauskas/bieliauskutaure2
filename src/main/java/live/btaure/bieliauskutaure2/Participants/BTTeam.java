@@ -2,7 +2,6 @@ package live.btaure.bieliauskutaure2.Participants;
 
 //TODO: if team loses or gets disqualified or leaves an active minigame, members might become Spectators. this should be implemented in the manager
 
-import live.btaure.bieliauskutaure2.Logger;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ public class BTTeam implements ConfigurationSerializable {
         this.score = initialScore;
         this.ID = teamID;
         this.name = name;
-        Logger.warning("A team was created that is smaller than the maximum team size");
+        Logger.getInstance().warning("A team was created that is smaller than the maximum team size");
     }
     public String getName()
     {

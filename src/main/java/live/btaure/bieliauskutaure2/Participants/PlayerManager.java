@@ -1,7 +1,6 @@
 package live.btaure.bieliauskutaure2.Participants;
 
 import live.btaure.bieliauskutaure2.ConfigManager;
-import live.btaure.bieliauskutaure2.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         if(playerManagerInstance == null)
         {
             playerManagerInstance = new PlayerManager();
+            Logger.getInstance().info("Teams and non-participants have been loaded from config");
         }
         return playerManagerInstance;
     }
@@ -28,7 +28,6 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     {
         this.BTPlayers = loadBTPlayers();
         this.BTTeams = loadTeams();
-        Logger.info("Teams and non-participants have been loaded from config");
     }
 
     /**
@@ -57,7 +56,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         ConfigManager.getInstance().reload();
         this.BTPlayers = loadBTPlayers();
         this.BTTeams = loadTeams();
-        Logger.info("Teams and player have been loaded from config");
+        Logger.getInstance().info("Teams and player have been loaded from config");
     }
 
     /**
@@ -232,13 +231,13 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     public void removeTeam(int index)
     {
         BTTeams.remove(index);
-        Logger.warning("A team was removed. The members will become spectators.");
+        Logger.getInstance().warning("A team was removed. The members will become spectators.");
         //TODO:make people with no teams into spectators(either manually here or implement this as a part of a timer that checks if there are people in the server that are not registered within the manager)
     }
     public void removePlayer(int index)
     {
         BTPlayers.remove(index);
-        Logger.warning("A player was removed. Doing this might cause issues and a role change is recommended instead.");
+        Logger.getInstance().warning("A player was removed. Doing this might cause issues and a role change is recommended instead.");
     }
 
     /**
@@ -282,13 +281,13 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
            if(exists(player.getID()))
                return false;
            BTPlayers.add(player);
-           Logger.info(String.format("A new player has been registered: %s",player.toString()));
+           Logger.getInstance().info(String.format("A new player has been registered: %s",player.toString()));
            ConfigManager.getInstance().setNonParticipants(BTPlayers);
            return true;
         }
         else if(addMode.equals(AddModeType.FORCE)) {
             BTPlayers.add(player);
-            Logger.warning(String.format("A new player has been registered without checking if he already exists: %s", player.toString()));
+            Logger.getInstance().warning(String.format("A new player has been registered without checking if he already exists: %s", player.toString()));
             ConfigManager.getInstance().setNonParticipants(BTPlayers);
             return true;
         }

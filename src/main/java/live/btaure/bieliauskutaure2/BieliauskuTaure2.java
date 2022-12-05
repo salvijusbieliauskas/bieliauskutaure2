@@ -17,7 +17,7 @@ public class BieliauskuTaure2 extends JavaPlugin {
         registerSerialization();
         registerCommands();
         registerGlobalListeners();
-        Logger.success("prisitriedziau ziauriai(plugin uzsikro ve)");
+        Logger.getInstance().success("prisitriedziau ziauriai(plugin uzsikro ve)");
     }
     @Override
     public void onDisable()
