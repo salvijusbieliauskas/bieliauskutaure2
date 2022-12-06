@@ -20,7 +20,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         if(playerManagerInstance == null)
         {
             playerManagerInstance = new PlayerManager();
-            Logger.getInstance().info("Teams and non-participants have been loaded from config");
+            Logger.getInstance().info("Teams and players have been loaded from config");
         }
         return playerManagerInstance;
     }
@@ -112,7 +112,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
 
     /**
      * Gets and returns a player by his index within the manager
-     * @param index index of the non-participant to get
+     * @param index index of the player to get
      * @return BTPlayer player at the given index
      */
     public BTPlayer getBTPlayer(int index)
@@ -274,43 +274,70 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     {
         return getBTPlayer(ID) != null;
     }
+
+    /**
+     * Adds a BTPlayer to the manager
+     * @param player BTPlayer to add
+     * @param addMode enum which specifies in what way the player should be added
+     * @return true if successful, false otherwise
+     */
     public boolean addBTPlayer(BTPlayer player, AddModeType addMode)//TODO:implement functionality for AddMode.REPLACE
     {
-        if(addMode.equals(AddModeType.CHECK))
-        {
-           if(exists(player.getID()))
-               return false;
-           BTPlayers.add(player);
-           Logger.getInstance().info(String.format("A new player has been registered: %s",player.toString()));
-           ConfigManager.getInstance().setNonParticipants(BTPlayers);
-           return true;
+        switch(addMode) {
+            case CHECK:
+                if (exists(player.getID()))
+                    return false;
+                BTPlayers.add(player);
+                Logger.getInstance().info(String.format("A new player has been registered: %s", player.toString()));
+                ConfigManager.getInstance().setNonParticipants(BTPlayers);
+                return true;
+            case FORCE:
+                BTPlayers.add(player);
+                Logger.getInstance().warning(String.format("A new player has been registered without checking if he already exists: %s", player.toString()));
+                ConfigManager.getInstance().setNonParticipants(BTPlayers);
+                return true;
+            case REPLACE:
+                removeAllPlayers(player.getID());
+                BTPlayers.add(player);
+                Logger.getInstance().info(String.format("Player %1$s was changed to %2$s", player.toString(), player.getClass().getName()));//cia galimai getClass().getName() neduos to ko noriu
+                return true;
+            default:
+                return false;
         }
-        else if(addMode.equals(AddModeType.FORCE)) {
-            BTPlayers.add(player);
-            Logger.getInstance().warning(String.format("A new player has been registered without checking if he already exists: %s", player.toString()));
-            ConfigManager.getInstance().setNonParticipants(BTPlayers);
-            return true;
-        }
-        else if(addMode.equals(AddModeType.REPLACE)){
-
-        }
-        return false;
     }
 
     /**
      * Removes all occurrences of the player with the associated ID
      * @param id UUID of the player to remove
      */
-    public void removeAll(UUID id)
+    public void removeAllPlayers(UUID id)
     {
-        int nonParticipantIndex = this.findBTPlayer(id);
-        while(nonParticipantIndex != -1)
+        int playerIndex = this.findBTPlayer(id);
+        while(playerIndex != -1)
         {
-            removePlayer(nonParticipantIndex);
-            nonParticipantIndex = this.findBTPlayer(id);
+            removePlayer(playerIndex);
+            playerIndex = this.findBTPlayer(id);
         }
-        //unfinished, remove from teams as well
     }
+    public void removeAllTeams(UUID id)
+    {
+        int teamIndex = this.findTeam(id);
+        while(teamIndex != -1)
+        {
+            removeTeam(teamIndex);
+            teamIndex = this.findBTPlayer(id);
+        }
+    }
+
+    /**
+     * Sends a message out to all Administrators which have their personal debug value set to a lesser or equal value than the provided level.
+     * Level 0 - success
+     * Level 1 - info
+     * Level 2 - warning
+     * Level 3 - error
+     * @param message Message to broadcast
+     * @param level level of the message to broadcast
+     */
     public void broadcastDebug(String message, int level)
     {
         for(BTPlayer player : BTPlayers)
@@ -323,9 +350,29 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                 player.getOfflinePlayer().getPlayer().sendMessage(message);
         }
     }
-    public void addTeam(BTTeam teamToAdd)
+    public boolean addTeam(BTTeam teamToAdd, AddModeType addMode)
     {
-        BTTeams.add(teamToAdd);
+        switch (addMode)
+        {
+            case FORCE:
+                BTTeams.add(teamToAdd);
+                Logger.getInstance().warning(String.format("A new team has been registered without checking if it already exists: %s", teamToAdd.toString()));
+                return true;
+            case CHECK:
+                if(findTeam(teamToAdd.getID())>-1)
+                    return false;
+                BTTeams.add(teamToAdd);
+                Logger.getInstance().warning(String.format("A new team has been registered: %s", teamToAdd.toString()));
+                return true;
+            case REPLACE:
+                removeAllTeams(teamToAdd.getID());
+                BTTeams.add(teamToAdd);
+                Logger.getInstance().warning(String.format("A new team has been registered, replacing others with the same UUID: %s", teamToAdd.toString()));
+                return true;
+            default:
+                return false;
+
+        }
     }
 
 }

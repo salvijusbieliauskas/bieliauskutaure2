@@ -37,10 +37,10 @@ public class ConfigManager
     }
     public List<BTPlayer> getBTPlayers()
     {
-        Object obj = plugin.getConfig().get("nonParticipants");
+        Object obj = plugin.getConfig().get("BTPlayers");
         if(obj == null)
             return new ArrayList<BTPlayer>();
-        return (List<BTPlayer>) plugin.getConfig().get("getBTPlayer");
+        return (List<BTPlayer>) obj;
     }
     public void setTeams(List<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
     {
@@ -48,9 +48,9 @@ public class ConfigManager
         save();
     }
 
-    public void setNonParticipants(List<BTPlayer> nonParticipants)
+    public void setNonParticipants(List<BTPlayer> BTPlayers)
     {
-        plugin.getConfig().set("nonParticipants",nonParticipants);
+        plugin.getConfig().set("BTPlayers",BTPlayers);
         save();
     }
 

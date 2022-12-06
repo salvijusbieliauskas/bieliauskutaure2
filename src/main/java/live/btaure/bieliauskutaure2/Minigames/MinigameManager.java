@@ -2,7 +2,23 @@ package live.btaure.bieliauskutaure2.Minigames;
 
 public class MinigameManager
 {
-    private static Minigame activeGame = null;
+    private Minigame activeGame = null;
+    private static MinigameManager minigameManagerInstance = null;
+    private MinigameManager()
+    {
+
+    }
+    public Minigame getActiveGame()
+    {
+        return activeGame;
+    }
+    public static MinigameManager getInstance()
+    {
+        if(minigameManagerInstance == null)
+            minigameManagerInstance = new MinigameManager();
+        return minigameManagerInstance;
+    }
+
     //TODO:clean up comments that are unnecessary
     //most of these methods will be calling the activeGame initialization, begin and end methods instead of doing everything here
     /**
@@ -11,7 +27,7 @@ public class MinigameManager
      * @param minigame the minigame to start
      * @return true if initialization was successful, otherwise false
      */
-    public static boolean Init(Minigame minigame)
+    public boolean Init(Minigame minigame)
     {
         return true;
     }
@@ -21,7 +37,7 @@ public class MinigameManager
      * begins the minigame by starting needed listeners, releasing players from a confined space(
      * @return true if starting the minigame was successful, otherwise false
      */
-    public static boolean Begin()
+    public boolean Begin()
     {
         return true;
     }
@@ -31,7 +47,7 @@ public class MinigameManager
      * Ends the minigame, setting everyone's gamemode to spectator, calculating scores, displaying title on screen (and in chat) that shows the winners and stopping any active listeners or other handlers. Marks the minigame as inactive.
      * @return true if the minigame was ended successfully, false otherwise
      */
-    public static boolean End()
+    public boolean End()
     {
         return true;
     }
@@ -42,7 +58,7 @@ public class MinigameManager
      * Resets the manager to its original state by setting activeGame to null(or lobby?), teleports all players to the lobby and resets their potionEffects, scoreboards, gamemodes etc.
      * @return true if the minigame was reset successfully, false otherwise
      */
-    public static boolean Reset()
+    public boolean Reset()
     {
         activeGame = null;
         return true;

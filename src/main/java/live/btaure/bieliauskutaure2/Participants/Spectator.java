@@ -1,5 +1,6 @@
 package live.btaure.bieliauskutaure2.Participants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -18,7 +19,7 @@ public class Spectator extends BTPlayer
 {
     public Spectator(UUID playerID,BTTeam team)
     {
-        super(playerID,team);
+        super(playerID,team, ChatColor.GRAY+"Stebėtojas");
     }
 
     @Override
@@ -26,10 +27,11 @@ public class Spectator extends BTPlayer
     {
         return true;
     }
+
     //<editor-fold desc="Serialization">
     public Spectator(Map<String,Object> map)
     {
-        super(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"));
+        this(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"));
     }
     @Override
     public @NotNull Map<String, Object> serialize()

@@ -1,7 +1,13 @@
 package live.btaure.bieliauskutaure2.Participants;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -15,7 +21,7 @@ import java.util.UUID;
 public class Administrator extends BTPlayer {
     private int debugMessagesLevel;
     public Administrator(UUID playerID, BTTeam team, int debugLevel) {
-        super(playerID,team);
+        super(playerID,team,ChatColor.RED+"Administratorius");
         this.debugMessagesLevel = debugLevel;
     }
     public int getDebugMessagesLevel()

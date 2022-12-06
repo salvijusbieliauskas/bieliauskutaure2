@@ -1,10 +1,16 @@
 package live.btaure.bieliauskutaure2.Participants;
 
+import live.btaure.bieliauskutaure2.Minigames.Lobby;
+import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
 
 import java.util.UUID;
 
@@ -12,11 +18,13 @@ import java.util.UUID;
 public abstract class BTPlayer implements ConfigurationSerializable {
 
     private OfflinePlayer player;
+    public final String roleName;
 
-    public BTPlayer(UUID playerID, BTTeam team)
+    public BTPlayer(UUID playerID, BTTeam team, String roleName)
     {
         this.player = Bukkit.getOfflinePlayer(playerID);
         this.team = team;
+        this.roleName = roleName;
     }
 
     public OfflinePlayer getOfflinePlayer()
@@ -50,6 +58,37 @@ public abstract class BTPlayer implements ConfigurationSerializable {
      * @return true if successful, false otherwise
      */
     public abstract boolean minigameTeleport();
+    public void updateScoreboard(){//TODO:tragedija
+        /*if(!isOnline()) {
+            Logger.getInstance().info("jis offline?XDD");
+            return;
+        }*/
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("individual","dummy", ChatColor.GOLD+""+ChatColor.BOLD+"BIELIAUSKŲ TAURĖ");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Score roleName = objective.getScore(ChatColor.BOLD+this.roleName);
+        roleName.setScore(15);
+        Score newLine = objective.getScore(" ");
+        newLine.setScore(14);
+        if(MinigameManager.getInstance().getActiveGame() != null && !(MinigameManager.getInstance().getActiveGame() instanceof Lobby)) {
+            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Aktyvus minigame:"+ChatColor.RESET+MinigameManager.getInstance().getActiveGame().name);
+            activeMinigameText.setScore(13);
+            if(getTeam()!=null) {
+                Score newLine2 = objective.getScore("  ");
+                newLine2.setScore(12);
+            }
+        }
+        if(getTeam()!=null)
+        {
+            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Jūsų komanda: "+ChatColor.RESET+ChatColor.GREEN+getTeam().getName());
+            activeMinigameText.setScore(11);
+            Score activeMinigameName = objective.getScore(ChatColor.BOLD+ "Taškai: "+ChatColor.GOLD+getTeam().getScore());
+            activeMinigameName.setScore(10);
+        }
+        getOfflinePlayer().getPlayer().setScoreboard(board);
+        Logger.getInstance().info("updateD?");
+    }
 
     /**
      * teleports this player to a specific location

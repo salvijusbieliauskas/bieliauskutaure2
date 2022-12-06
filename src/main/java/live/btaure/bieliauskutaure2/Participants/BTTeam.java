@@ -42,6 +42,10 @@ public class BTTeam implements ConfigurationSerializable {
     {
         return this.ID;
     }
+    public int getScore()
+    {
+        return this.score;
+    }
     @Override
     public String toString()
     {

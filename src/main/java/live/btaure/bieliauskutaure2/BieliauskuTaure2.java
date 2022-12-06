@@ -37,6 +37,6 @@ public class BieliauskuTaure2 extends JavaPlugin {
     }
     private void registerGlobalListeners()
     {
-        getServer().getPluginManager().registerEvents(new GlobalJoinListener(playerManager),this);
+        getServer().getPluginManager().registerEvents(new GlobalJoinListener(),this);
     }
 }
