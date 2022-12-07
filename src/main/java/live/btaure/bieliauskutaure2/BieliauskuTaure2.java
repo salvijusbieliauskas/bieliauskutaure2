@@ -22,11 +22,12 @@ public class BieliauskuTaure2 extends JavaPlugin {
     @Override
     public void onDisable()
     {
-
+        Logger.getInstance().success("plugin issikrove");
     }
     private void registerSerialization()
     {
         ConfigurationSerialization.registerClass(BTTeam.class,"BTTeam");
+        ConfigurationSerialization.registerClass(Streamer.class,"Streamer");
         ConfigurationSerialization.registerClass(Spectator.class,"Spectator");
         ConfigurationSerialization.registerClass(Participant.class,"Participant");
         ConfigurationSerialization.registerClass(Administrator.class,"Administrator");

@@ -12,6 +12,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -26,10 +27,16 @@ public abstract class BTPlayer implements ConfigurationSerializable {
         this.team = team;
         this.roleName = roleName;
     }
+    public abstract HashMap<PermissionType,Boolean> getPermissions();
 
     public OfflinePlayer getOfflinePlayer()
     {
+        Logger.getInstance().warning("getOfflinePlayer was called. it should never be called.");
         return player;
+    }
+    public Player getPlayer()
+    {
+        return Bukkit.getPlayer(this.getID());
     }
     private BTTeam team = null;
     public BTTeam getTeam()
@@ -51,18 +58,12 @@ public abstract class BTPlayer implements ConfigurationSerializable {
     {
         return player.getName();
     }
-
-    /**
-     * used by minigames in order to teleport the player to their appropriate position once it begins or ends
-     *
-     * @return true if successful, false otherwise
-     */
-    public abstract boolean minigameTeleport();
-    public void updateScoreboard(){//TODO:tragedija
-        /*if(!isOnline()) {
-            Logger.getInstance().info("jis offline?XDD");
+    public void updateScoreboard(){//TODO:run this code a million times to check if it doesn't fill up memory
+        if(!isOnline()) {
+            Logger.getInstance().info("JIS OFFLINExd");
             return;
-        }*/
+        }
+        Logger.getInstance().info("jis on.");
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("individual","dummy", ChatColor.GOLD+""+ChatColor.BOLD+"BIELIAUSKŲ TAURĖ");
@@ -86,8 +87,7 @@ public abstract class BTPlayer implements ConfigurationSerializable {
             Score activeMinigameName = objective.getScore(ChatColor.BOLD+ "Taškai: "+ChatColor.GOLD+getTeam().getScore());
             activeMinigameName.setScore(10);
         }
-        getOfflinePlayer().getPlayer().setScoreboard(board);
-        Logger.getInstance().info("updateD?");
+        getPlayer().setScoreboard(board);
     }
 
     /**
@@ -97,8 +97,8 @@ public abstract class BTPlayer implements ConfigurationSerializable {
      */
     public boolean teleport(Location loc)
     {
-        if (!player.isOnline()) return false;
-        player.getPlayer().teleport(loc);
+        if (!isOnline()) return false;
+        getPlayer().teleport(loc);
         return true;
     }
 

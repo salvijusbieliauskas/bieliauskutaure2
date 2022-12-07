@@ -20,10 +20,14 @@ import java.util.UUID;
 @SerializableAs("Administrator")
 public class Administrator extends BTPlayer {
     private int debugMessagesLevel;
+    private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
+        put(PermissionType.BREAK_BLOCKS,true);
+    }};
     public Administrator(UUID playerID, BTTeam team, int debugLevel) {
         super(playerID,team,ChatColor.RED+"Administratorius");
         this.debugMessagesLevel = debugLevel;
     }
+
     public int getDebugMessagesLevel()
     {
         return debugMessagesLevel;
@@ -32,19 +36,16 @@ public class Administrator extends BTPlayer {
     {
         this.debugMessagesLevel = level;
     }
-    @Override
-    public boolean minigameTeleport() {
-        return true;
-    }
 
     @Override
-    public boolean teleport(Location loc) {
-        return true;
+    public HashMap<PermissionType, Boolean> getPermissions()
+    {
+        return permissions;
     }
     //<editor-fold desc="Serialization">
     public Administrator(Map<String,Object> map)
     {
-        this(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"),Integer.parseInt((String)map.get("debugLevel")));
+        this(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"),(Integer)map.get("debugLevel"));
     }
     @Override
     public @NotNull Map<String, Object> serialize() {

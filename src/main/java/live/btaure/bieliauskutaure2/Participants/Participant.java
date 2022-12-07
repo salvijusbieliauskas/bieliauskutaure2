@@ -16,15 +16,20 @@ import java.util.UUID;
 @SerializableAs("Participant")
 public class Participant extends BTPlayer implements ConfigurationSerializable
 {
+    private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
+        put(PermissionType.BREAK_BLOCKS,false);
+    }};
     public Participant(UUID playerID,BTTeam team)
     {
         super(playerID,team, ChatColor.WHITE+"Dalyvis");
+        HashMap<PermissionType,Boolean> permissions = new HashMap<>();
+        permissions.put(PermissionType.BREAK_BLOCKS,false);
     }
 
     @Override
-    public boolean minigameTeleport()
+    public HashMap<PermissionType, Boolean> getPermissions()
     {
-        return true;
+        return permissions;
     }
     //<editor-fold desc="Serialization">
     public Participant(Map<String,Object> map)

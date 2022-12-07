@@ -1,19 +1,21 @@
 package live.btaure.bieliauskutaure2.Participants;
 
 import live.btaure.bieliauskutaure2.ConfigManager;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * class that contains static methods in order to manage players and houses a list of all the players in the server.
+ * singleton class that contains static methods in order to manage players and houses a list of all the players in the server.
  */
 public class PlayerManager//TOOD:pertvarkyti teamu struktura
 {
     private List<BTPlayer> BTPlayers = new ArrayList<BTPlayer>();//contains all players
     private List<BTTeam> BTTeams = new ArrayList<BTTeam>();//contains teams which contain participants
     private static PlayerManager playerManagerInstance = null;
+    public static final int maxTeamSize = 2;
 
     public static PlayerManager getInstance()
     {
@@ -29,6 +31,80 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         this.BTPlayers = loadBTPlayers();
         this.BTTeams = loadTeams();
     }
+
+    /**
+     * Updates the scoreboards of all online players
+     */
+    public void updateScoreboards()
+    {
+        for(BTPlayer player : BTPlayers)
+        {
+            player.updateScoreboard();
+        }
+    }
+
+    /**
+     * Teleports all participants to the provided location
+     * @param loc location to teleport to
+     * @param requireValid if true, only participants with valid teams will be teleported
+     */
+    public void teleportParticipants(Location loc, boolean requireValid)
+    {
+        teleportParticipants(new ArrayList<Location>(){{add(loc);}},requireValid);
+    }
+
+    /**
+     * Teleports all participants to the provided locations, iterating through them
+     * @param loc locations to teleport to
+     * @param requireValid if true, only participants with valid teams will be teleported
+     */
+    public void teleportParticipants(List<Location> loc, boolean requireValid)
+    {
+        int locIndex = 0;
+        for(BTPlayer player : BTPlayers)
+        {
+            if(!player.isOnline())
+                continue;
+            if(!(player instanceof Participant))
+                continue;
+            if(requireValid && !isTeamSizeValid(player.getTeam()))
+                continue;
+            player.getPlayer().teleport(loc.get(locIndex));
+            locIndex++;
+            if(locIndex>=loc.size())
+                locIndex=0;
+        }
+    }
+
+    /**
+     * Teleports all players, which are not participants to the provided location
+     * @param loc location to teleport to
+     */
+    public void teleportSpectators(Location loc)
+    {
+        teleportSpectators(new ArrayList<Location>(){{add(loc);}});
+    }
+    /**
+     * Teleports all players, which are not participants to the provided locations, iterating through them
+     * @param loc locations to teleport to
+     */
+    public void teleportSpectators(List<Location> loc)
+    {
+        int locIndex = 0;
+        for(BTPlayer player : BTPlayers)
+        {
+            if(!player.isOnline())
+                continue;
+            if(player instanceof Participant)
+                continue;
+            player.getPlayer().teleport(loc.get(locIndex));
+            locIndex++;
+            if(locIndex>=loc.size())
+                locIndex=0;
+        }
+    }
+
+
 
     /**
      * Gets and returns player from the plugin configuration
@@ -129,11 +205,19 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     }
 
     /**
-     * @return the count of active teams
+     * @return the count of registered teams
      */
     public int getTeamCount()
     {
         return BTTeams.size();
+    }
+
+    /**
+     * @return the count of registered players
+     */
+    public int getPlayerCount()
+    {
+        return BTPlayers.size();
     }
 
 
@@ -228,12 +312,22 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             return indexes1.get(0);
         return -2;
     }
+
+    /**
+     * Removes a team from the manager at the specified index
+     * @param index index of the team to remove
+     */
     public void removeTeam(int index)
     {
         BTTeams.remove(index);
         Logger.getInstance().warning("A team was removed. The members will become spectators.");
         //TODO:make people with no teams into spectators(either manually here or implement this as a part of a timer that checks if there are people in the server that are not registered within the manager)
     }
+
+    /**
+     * Removes a player from the manager at the specified index
+     * @param index index of the player to remove
+     */
     public void removePlayer(int index)
     {
         BTPlayers.remove(index);
@@ -241,29 +335,64 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     }
 
     /**
-     * Checks if all teams have a valid number of players
-     * @return true if all teams have a valid number of players, false otherwise
+     * Finds and gets all team members of the provided team
+     * @param team team to get the members of
+     * @return a new list, containing members of the given team
      */
-    /*public boolean validateTeamsSize()
+    public List<BTPlayer> getTeamMembers(BTTeam team)
+    {
+        List<BTPlayer> toReturn = new ArrayList<BTPlayer>();
+        for(BTPlayer player : BTPlayers)
+            if(player.getTeam().equals(team))
+                toReturn.add(player);
+        return toReturn;
+    }
+
+    /**
+     * Gets size of the provided team.
+     * Should not be used if getTeamMembers gets called in the same method.
+     * @param team Team to get the size of
+     * @return the size of the team provided
+     */
+    public int getTeamSize(BTTeam team)
+    {
+        return getTeamMembers(team).size();
+    }
+
+    /**
+     * Checks if the size of the provided team matches the maximum team size.
+     * Should not be used if getTeamMembers gets called in the same method.
+     * @param team Team to validate
+     * @return true if the provided team's size is valid, false otherwise
+     */
+    public boolean isTeamSizeValid(BTTeam team)
+    {
+        return getTeamSize(team) == maxTeamSize;
+    }
+    /**
+     * Checks if all teams have a valid number of players
+     * @return a list of valid teams
+     */
+    public List<BTTeam> validateTeamsSize()
     {
         List<BTTeam> invalidTeams = new ArrayList<BTTeam>();
         for(BTTeam team : BTTeams)
         {
-            if(!team.isSizeValid())
+            if(!isTeamSizeValid(team))
             {
                 invalidTeams.add(team);
             }
         }
         if(invalidTeams.size() == 0) {
-            Logger.success(String.format("[TEAM VALIDATION] Successfully validated %d teams",BTTeams.size()));
-            return true;
+            Logger.getInstance().success(String.format("[TEAM VALIDATION] Successfully validated %d teams",BTTeams.size()));
+            return invalidTeams;
         }
         StringBuilder message = new StringBuilder(String.format("[TEAM VALIDATION] %d teams failed validation. Invalid teams:\n",invalidTeams.size()));
         for(BTTeam team : invalidTeams)
             message.append(team.toString()).append('\n');
-        Logger.error(message.toString().trim());
-        return false;
-    }*/
+        Logger.getInstance().error(message.toString().trim());
+        return invalidTeams;
+    }
 
     /**
      * Checks if a player with the given UUID exists in this manager
@@ -281,7 +410,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
      * @param addMode enum which specifies in what way the player should be added
      * @return true if successful, false otherwise
      */
-    public boolean addBTPlayer(BTPlayer player, AddModeType addMode)//TODO:implement functionality for AddMode.REPLACE
+    public boolean addBTPlayer(BTPlayer player, AddModeType addMode)
     {
         switch(addMode) {
             case CHECK:
@@ -319,6 +448,11 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             playerIndex = this.findBTPlayer(id);
         }
     }
+
+    /**
+     * Removes all occurrences of teams that have the UUID provided in the parameters
+     * @param id UUID of the teams to remove
+     */
     public void removeAllTeams(UUID id)
     {
         int teamIndex = this.findTeam(id);
@@ -347,9 +481,16 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             if(!player.isOnline())
                 continue;
             if(((Administrator)player).getDebugMessagesLevel() <= level)
-                player.getOfflinePlayer().getPlayer().sendMessage(message);
+                player.getPlayer().sendMessage(message);
         }
     }
+
+    /**
+     * Adds the provided team in the given fashion to the manager
+     * @param teamToAdd The team to add
+     * @param addMode Method to use while adding the team
+     * @return true if successful, false otherwise
+     */
     public boolean addTeam(BTTeam teamToAdd, AddModeType addMode)
     {
         switch (addMode)

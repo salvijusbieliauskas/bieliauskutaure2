@@ -13,7 +13,6 @@ import java.util.*;
  */
 @SerializableAs("BTTeam")
 public class BTTeam implements ConfigurationSerializable {
-    public static final int maxTeamSize = 2;
     private int score;
     private UUID ID;
     private String name;
@@ -50,6 +49,13 @@ public class BTTeam implements ConfigurationSerializable {
     public String toString()
     {
         return String.format("%1$s (%2$s)",this.getName(),this.getID());
+    }
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof BTTeam)
+            return ((BTTeam)other).getID().equals(this.getID());
+        return false;
     }
 
     //<editor-fold desc="Serialization">

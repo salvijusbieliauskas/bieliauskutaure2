@@ -1,12 +1,18 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import live.btaure.bieliauskutaure2.BieliauskuTaure2;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.event.Listener;
+
 public class MinigameManager
 {
     private Minigame activeGame = null;
     private static MinigameManager minigameManagerInstance = null;
     private MinigameManager()
     {
-
+        init(new Lobby());
     }
     public Minigame getActiveGame()
     {
@@ -27,8 +33,10 @@ public class MinigameManager
      * @param minigame the minigame to start
      * @return true if initialization was successful, otherwise false
      */
-    public boolean Init(Minigame minigame)
+    public boolean init(Minigame minigame)
     {
+        this.activeGame = minigame;
+        Bukkit.getServer().getPluginManager().registerEvents(this.activeGame, BieliauskuTaure2.getPlugin(BieliauskuTaure2.class));
         return true;
     }
     //begin should only be called manually, once all players are ready and have loaded in to avoid blockparty incident
@@ -37,7 +45,7 @@ public class MinigameManager
      * begins the minigame by starting needed listeners, releasing players from a confined space(
      * @return true if starting the minigame was successful, otherwise false
      */
-    public boolean Begin()
+    public boolean begin()
     {
         return true;
     }
@@ -47,8 +55,10 @@ public class MinigameManager
      * Ends the minigame, setting everyone's gamemode to spectator, calculating scores, displaying title on screen (and in chat) that shows the winners and stopping any active listeners or other handlers. Marks the minigame as inactive.
      * @return true if the minigame was ended successfully, false otherwise
      */
-    public boolean End()
+    public boolean end()
     {
+        BlockDestroyEvent.getHandlerList().unregister(this.activeGame);
+        this.activeGame.setGameMode(GameMode.SPECTATOR);
         return true;
     }
 //TODO:the reset method should check if the minigame is active(in case end was not called before) and call End in order to remove any issues that could arise from destroying a class instance that is listening for events
@@ -58,9 +68,9 @@ public class MinigameManager
      * Resets the manager to its original state by setting activeGame to null(or lobby?), teleports all players to the lobby and resets their potionEffects, scoreboards, gamemodes etc.
      * @return true if the minigame was reset successfully, false otherwise
      */
-    public boolean Reset()
+    public boolean reset()
     {
-        activeGame = null;
+        init(new Lobby());
         return true;
     }
 }
