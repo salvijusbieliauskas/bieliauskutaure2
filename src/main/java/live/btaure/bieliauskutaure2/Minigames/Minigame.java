@@ -32,7 +32,8 @@ public abstract class Minigame implements Listener
     }
 
     public abstract void applySettings(BTPlayer player);
-
+    public abstract void teleportParticipant(BTPlayer player);
+    public abstract void teleportSpectator(BTPlayer player);
     /**
      * Checks whether the provided player should have minigame-specific settings applied to them
      * @param player player to check
@@ -45,5 +46,16 @@ public abstract class Minigame implements Listener
         if(!(player instanceof Participant))
             return false;
         return true;
+    }
+    public static Class getMinigameClass(String name)
+    {
+        try {
+            Class aClass = Class.forName("live.btaure.bieliauskutaure2.Minigames."+name);
+            if(aClass.getSuperclass() != null && aClass.getSuperclass().getName().equals(Minigame.class.getName()))
+                return aClass;
+            return null;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 }

@@ -2,8 +2,6 @@ package live.btaure.bieliauskutaure2.Participants;
 
 import live.btaure.bieliauskutaure2.Minigames.Lobby;
 import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,18 +18,19 @@ public abstract class BTPlayer implements ConfigurationSerializable {
 
     private OfflinePlayer player;
     public final String roleName;
+    public final ChatColor roleColor;
 
-    public BTPlayer(UUID playerID, BTTeam team, String roleName)
+    public BTPlayer(UUID playerID, BTTeam team, String roleName, ChatColor roleColor)
     {
         this.player = Bukkit.getOfflinePlayer(playerID);
         this.team = team;
         this.roleName = roleName;
+        this.roleColor = roleColor;
     }
     public abstract HashMap<PermissionType,Boolean> getPermissions();
 
     public OfflinePlayer getOfflinePlayer()
     {
-        Logger.getInstance().warning("getOfflinePlayer was called. it should never be called.");
         return player;
     }
     public Player getPlayer()
@@ -56,24 +55,22 @@ public abstract class BTPlayer implements ConfigurationSerializable {
      */
     public String getName()
     {
-        return player.getName();
+        return getOfflinePlayer().getName();
     }
     public void updateScoreboard(){//TODO:run this code a million times to check if it doesn't fill up memory
         if(!isOnline()) {
-            Logger.getInstance().info("JIS OFFLINExd");
             return;
         }
-        Logger.getInstance().info("jis on.");
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("individual","dummy", ChatColor.GOLD+""+ChatColor.BOLD+"BIELIAUSKŲ TAURĖ");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        Score roleName = objective.getScore(ChatColor.BOLD+this.roleName);
+        Score roleName = objective.getScore(this.roleColor+""+ChatColor.BOLD+this.roleName);
         roleName.setScore(15);
         Score newLine = objective.getScore(" ");
         newLine.setScore(14);
         if(MinigameManager.getInstance().getActiveGame() != null && !(MinigameManager.getInstance().getActiveGame() instanceof Lobby)) {
-            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Aktyvus minigame:"+ChatColor.RESET+MinigameManager.getInstance().getActiveGame().name);
+            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Minigame: "+ChatColor.RESET+MinigameManager.getInstance().getActiveGame().name);
             activeMinigameText.setScore(13);
             if(getTeam()!=null) {
                 Score newLine2 = objective.getScore("  ");

@@ -1,7 +1,6 @@
 package live.btaure.bieliauskutaure2.Participants;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,7 @@ public class Participant extends BTPlayer implements ConfigurationSerializable
     }};
     public Participant(UUID playerID,BTTeam team)
     {
-        super(playerID,team, ChatColor.WHITE+"Dalyvis");
+        super(playerID,team, "Dalyvis", ChatColor.WHITE);
         HashMap<PermissionType,Boolean> permissions = new HashMap<>();
         permissions.put(PermissionType.BREAK_BLOCKS,false);
     }

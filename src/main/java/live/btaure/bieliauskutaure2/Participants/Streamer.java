@@ -16,7 +16,7 @@ public class Streamer extends BTPlayer{
 
     public Streamer(UUID playerID)
     {
-        super(playerID, null, ChatColor.DARK_RED+"Transliuotojas");
+        super(playerID, null, "Transliuotojas", ChatColor.DARK_RED);
     }
 
     @Override

@@ -6,3 +6,6 @@ commands:
   team:
     description: Can be used to modify and add teams
     usage: as neisivaizduoju
+  minigame:
+    description: Interacts with the MinigameManager
+    usage: The command failed. /minigame <task> <args>

@@ -1,20 +1,20 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import live.btaure.bieliauskutaure2.Participants.BTPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.World;
+import live.btaure.bieliauskutaure2.Participants.*;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 
-public class Lobby extends Minigame{
+public class Lobby extends Minigame implements Listener {
 
     public Lobby()
     {
         super(true,"Lobby", GameMode.SURVIVAL);
     }
-    private World world = Bukkit.getWorld("NEWLOBBY");
+    private static World world = Bukkit.getServer().createWorld(new WorldCreator("NEWLOBBY"));
     @Override
     public World getWorld()
     {
@@ -36,9 +36,24 @@ public class Lobby extends Minigame{
         bukkitPlayer.setGameMode(super.getGameMode());
     }
 
-    @EventHandler
-    public void onBlockBreak(BlockDestroyEvent e)
+    @Override
+    public void teleportParticipant(BTPlayer player)
     {
+        player.teleport(new Location(getWorld(),0,0,0));
+    }
 
+    @Override
+    public void teleportSpectator(BTPlayer player)
+    {
+        player.teleport(new Location(getWorld(),0,0,0));
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e)
+    {
+        BTPlayer player = PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId());
+        if(player instanceof Administrator || player instanceof Streamer)
+            return;
+        e.setCancelled(true);
     }
 }

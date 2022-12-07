@@ -20,4 +20,9 @@ public class Result<T> implements IResult
     public void setSuccessful(boolean successful) {
         isSuccessful = successful;
     }
+    public Result(T result, boolean successful)
+    {
+        this.result = result;
+        this.isSuccessful = successful;
+    }
 }

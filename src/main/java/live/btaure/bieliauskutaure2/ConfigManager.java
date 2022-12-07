@@ -5,6 +5,7 @@ import live.btaure.bieliauskutaure2.Participants.BTTeam;
 import live.btaure.bieliauskutaure2.Participants.Logger;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ConfigManager
@@ -42,15 +43,15 @@ public class ConfigManager
             return new ArrayList<BTPlayer>();
         return (List<BTPlayer>) obj;
     }
-    public void setTeams(List<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
+    public void setTeams(Collection<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
     {
-        plugin.getConfig().set("teams",teams);
+        plugin.getConfig().set("teams",new ArrayList<BTTeam>(teams));
         save();
     }
 
-    public void setNonParticipants(List<BTPlayer> BTPlayers)
+    public void setNonParticipants(Collection<BTPlayer> BTPlayers)
     {
-        plugin.getConfig().set("BTPlayers",BTPlayers);
+        plugin.getConfig().set("BTPlayers",new ArrayList<BTPlayer>(BTPlayers));
         save();
     }
 
