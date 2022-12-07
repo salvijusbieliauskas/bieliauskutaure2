@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Added some basic, unfinished infrastructure">
+    <list default="true" id="ab2a0785-01e5-45f4-8dad-cce29f52e663" name="Changes" comment="Added.. a lot. Fixed interaction with BTPlayers after server restart.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/BieliauskuTaure2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Commands/TeamCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/ConfigManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Listeners/GlobalJoinListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Logger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Administrator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/BTTeam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Participant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/PlayerManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/live/btaure/bieliauskutaure2/Participants/Spectator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +23,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.16.5-R0.1-SNAPSHOT/paper-api-1.16.5-R0.1-20211218.082619-371.jar!/org/bukkit/event/Event.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.16.5-R0.1-SNAPSHOT/paper-api-1.16.5-R0.1-20211218.082619-371.jar!/org/bukkit/plugin/SimplePluginManager.class" root0="SKIP_INSPECTION" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2IBiHXaniKt32NT1hrltWFQeUHu" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -53,7 +50,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.25632185&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -61,7 +58,7 @@
       <recent name="D:\Projects\MC BIEL TAURE 2022" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Maven.package">
     <configuration name="package" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -88,6 +85,24 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <configuration name="attach debugger" type="Remote">
+      <module name="bieliauskutaure2" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Maven.package" />
+      <item itemvalue="Remote JVM Debug.attach debugger" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -114,6 +129,11 @@
       <workItem from="1670194905028" duration="30000" />
       <workItem from="1670252499920" duration="486000" />
       <workItem from="1670254166960" duration="2586000" />
+      <workItem from="1670277005637" duration="2245000" />
+      <workItem from="1670285833371" duration="6408000" />
+      <workItem from="1670351807085" duration="490000" />
+      <workItem from="1670360586827" duration="11763000" />
+      <workItem from="1670404005399" duration="39000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1669662483459</created>
@@ -136,7 +156,28 @@
       <option name="project" value="LOCAL" />
       <updated>1670087579664</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added scoreboards, added new methods for teams and players, started work on minigames">
+      <created>1670292377877</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670292377877</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fixed scoreboard updating on player join">
+      <created>1670352289697</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670352289697</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added.. a lot. Fixed interaction with BTPlayers after server restart.">
+      <created>1670372301058</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670372301058</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,6 +202,9 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Changed version to 1.16.5" />
     <MESSAGE value="Added some basic, unfinished infrastructure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some basic, unfinished infrastructure" />
+    <MESSAGE value="Added scoreboards, added new methods for teams and players, started work on minigames" />
+    <MESSAGE value="Fixed scoreboard updating on player join" />
+    <MESSAGE value="Added.. a lot. Fixed interaction with BTPlayers after server restart." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added.. a lot. Fixed interaction with BTPlayers after server restart." />
   </component>
 </project>
