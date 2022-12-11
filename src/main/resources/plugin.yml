@@ -11,3 +11,5 @@ commands:
     usage: The command failed. /minigame <task> <args>
   test:
     description: xd?
+  debuglevel:
+    description: Sets debug level 1-4.
