@@ -13,3 +13,7 @@ commands:
     description: xd?
   debuglevel:
     description: Sets debug level 1-4.
+    usage: /debuglevel <skaicius(1-4)>
+  setrole:
+    description: Sets a role for a specific player.
+    usage: /setrole <zaidejo vardas> <role>
