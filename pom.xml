@@ -42,12 +42,12 @@
         <profile>
             <id>otherOutputDir</id>
             <build>
-                <directory>D:\Projects\MC BIEL TAURE 2022\serveris\plugins</directory>
+                <directory>C:\Projects\mc bieliausku taure 2\serveris\plugins</directory>
             </build>
         </profile>
     </profiles>
     <build>
-        <outputDirectory>D:\Projects\MC BIEL TAURE 2022\serveris\plugins</outputDirectory>
+        <outputDirectory>C:\Projects\mc bieliausku taure 2\serveris\plugins</outputDirectory>
         <finalName>BieliauskuTaure2</finalName>
         <plugins>
             <plugin>

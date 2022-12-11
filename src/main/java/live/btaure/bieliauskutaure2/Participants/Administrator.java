@@ -1,7 +1,9 @@
 package live.btaure.bieliauskutaure2.Participants;
 
+import live.btaure.bieliauskutaure2.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class Administrator extends BTPlayer {
     public void setDebugMessagesLevel(int level)
     {
         this.debugMessagesLevel = level;
+        PlayerManager.getInstance().saveBTPlayers();
     }
 
     @Override
@@ -46,7 +49,7 @@ public class Administrator extends BTPlayer {
         Map<String,Object> map = new HashMap<>();
         map.put("UUID",super.getID().toString());
         map.put("team",super.getTeam());
-        map.put("debugLevel",String.valueOf(this.debugMessagesLevel));
+        map.put("debugLevel",this.debugMessagesLevel);
         return map;
     }
 

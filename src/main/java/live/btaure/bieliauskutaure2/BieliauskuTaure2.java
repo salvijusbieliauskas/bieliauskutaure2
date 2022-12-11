@@ -1,5 +1,6 @@
 package live.btaure.bieliauskutaure2;
 
+import live.btaure.bieliauskutaure2.Commands.DebugLevelCommand;
 import live.btaure.bieliauskutaure2.Commands.MinigameCommand;
 import live.btaure.bieliauskutaure2.Commands.TeamCommand;
 import live.btaure.bieliauskutaure2.Commands.TestCommand;
@@ -60,6 +61,7 @@ public class BieliauskuTaure2 extends JavaPlugin {
     {
         this.getCommand("team").setExecutor(new TeamCommand());
         this.getCommand("minigame").setExecutor(new MinigameCommand());
+        this.getCommand("debuglevel").setExecutor(new DebugLevelCommand());
 
         this.getCommand("test").setExecutor(new TestCommand());
     }

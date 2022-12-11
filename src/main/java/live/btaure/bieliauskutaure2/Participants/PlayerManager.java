@@ -16,6 +16,7 @@ import java.util.UUID;
 public class PlayerManager//TOOD:pertvarkyti teamu struktura
 {
     private HashMap<UUID, BTPlayer> BTPlayers = new HashMap<UUID,BTPlayer>();//contains all players
+
     private HashMap<UUID, BTTeam> BTTeams = new HashMap<UUID,BTTeam>();//contains teams which contain participants
     private static PlayerManager playerManagerInstance = null;
     public static final int maxTeamSize = 2;
@@ -54,6 +55,11 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     public void teleportParticipants(Location loc, boolean requireValid)
     {
         teleportParticipants(new ArrayList<Location>(){{add(loc);}},requireValid);
+    }
+
+    public void saveBTPlayers()
+    {
+        ConfigManager.getInstance().setNonParticipants(BTPlayers.values());
     }
 
     /**
@@ -398,7 +404,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                     Logger.getInstance().warning(String.format("A new player has been registered: %s", player.toString()));
                 else
                     Logger.getInstance().info(String.format("Player %1$s was changed to %2$s", player.toString(), player.getClass().getName()));
-                ConfigManager.getInstance().setNonParticipants(BTPlayers.values());
+                saveBTPlayers();
                 return true;
             default:
                 return false;
