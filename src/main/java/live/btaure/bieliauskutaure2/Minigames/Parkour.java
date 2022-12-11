@@ -1,5 +1,6 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.jeff_media.customblockdata.CustomBlockData;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Participants.*;
@@ -8,6 +9,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -49,11 +53,13 @@ public class Parkour extends Minigame{
         if(!super.performChecks(player))
             return;
         Player bukkitPlayer = player.getPlayer();
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,21));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,21));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,22));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,22));
         bukkitPlayer.setGameMode(super.getGameMode());
-        playerCheckpointLocations.put(player.getID(),getParticipantSpawnLocation());
-        playerCheckpointIndexes.put(player.getID(),0);
+        if(!playerCheckpointIndexes.containsKey(player.getID()))
+            playerCheckpointIndexes.put(player.getID(),0);
+        if(!playerCheckpointLocations.containsKey(player.getID()))
+            playerCheckpointLocations.put(player.getID(),getParticipantSpawnLocation());
 
     }
 
@@ -86,7 +92,10 @@ public class Parkour extends Minigame{
     public boolean end()
     {
         PlayerMoveEvent.getHandlerList().unregister(this);
-        BlockBreakEvent.getHandlerList().unregister(this);
+        BlockDestroyEvent.getHandlerList().unregister(this);
+        BlockPlaceEvent.getHandlerList().unregister(this);
+        EntityDamageEvent.getHandlerList().unregister(this);
+        EntityDamageByEntityEvent.getHandlerList().unregister(this);
         return true;
     }
 
@@ -142,7 +151,35 @@ public class Parkour extends Minigame{
     public void onBlockBreak(BlockBreakEvent e)
     {
         BTPlayer player = PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId());
-        if(player instanceof Administrator || player instanceof Streamer)
+        if(player.getPermissions().get(PermissionType.BREAK_BLOCKS))
+            return;
+        e.setCancelled(true);
+    }
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e)
+    {
+        if(e.getEntity() instanceof Player)
+            e.setCancelled(true);
+    }
+    @EventHandler
+    public void onEntityDamageEntity(EntityDamageByEntityEvent e)
+    {
+        if(!(e.getDamager() instanceof Player damager))
+        {
+            e.setCancelled(true);
+            return;
+        }
+        if(PlayerManager.getInstance().getBTPlayer(damager.getUniqueId()).getPermissions().get(PermissionType.DAMAGE_ENTITIES))
+        {
+            return;
+        }
+        e.setCancelled(true);
+        return;
+    }
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e)
+    {
+        if(PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId()).getPermissions().get(PermissionType.PLACE_BLOCKS))
             return;
         e.setCancelled(true);
     }

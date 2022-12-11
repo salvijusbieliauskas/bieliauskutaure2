@@ -17,6 +17,8 @@ public class Spectator extends BTPlayer
 {
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,false);
+        put(PermissionType.PLACE_BLOCKS,false);
+        put(PermissionType.DAMAGE_ENTITIES,false);
     }};
     public Spectator(UUID playerID,BTTeam team)
     {

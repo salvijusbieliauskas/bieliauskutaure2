@@ -17,12 +17,13 @@ public class Participant extends BTPlayer implements ConfigurationSerializable
 {
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,false);
+        put(PermissionType.PLACE_BLOCKS,false);
+        put(PermissionType.DAMAGE_ENTITIES,false);
     }};
     public Participant(UUID playerID,BTTeam team)
     {
         super(playerID,team, "Dalyvis", ChatColor.WHITE);
         HashMap<PermissionType,Boolean> permissions = new HashMap<>();
-        permissions.put(PermissionType.BREAK_BLOCKS,false);
     }
 
     @Override
