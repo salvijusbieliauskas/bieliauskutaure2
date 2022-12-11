@@ -17,6 +17,7 @@ public class Participant extends BTPlayer implements ConfigurationSerializable
 {
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,false);
+        put(PermissionType.SET_ROLE,false);
     }};
     public Participant(UUID playerID,BTTeam team)
     {

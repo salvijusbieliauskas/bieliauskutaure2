@@ -12,6 +12,7 @@ import java.util.UUID;
 public class Streamer extends BTPlayer{
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,true);
+        put(PermissionType.SET_ROLE,true);
     }};
 
     public Streamer(UUID playerID)
