@@ -13,6 +13,8 @@ public class Streamer extends BTPlayer{
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,true);
         put(PermissionType.SET_ROLE,true);
+        put(PermissionType.PLACE_BLOCKS,true);
+        put(PermissionType.DAMAGE_ENTITIES,true);
     }};
 
     public Streamer(UUID playerID)

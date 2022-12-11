@@ -19,6 +19,8 @@ public class Administrator extends BTPlayer {
     private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
         put(PermissionType.BREAK_BLOCKS,true);
         put(PermissionType.SET_ROLE,true);
+        put(PermissionType.PLACE_BLOCKS,true);
+        put(PermissionType.DAMAGE_ENTITIES,true);
     }};
     public Administrator(UUID playerID, BTTeam team, int debugLevel) {
         super(playerID,team,"Administratorius", ChatColor.RED);

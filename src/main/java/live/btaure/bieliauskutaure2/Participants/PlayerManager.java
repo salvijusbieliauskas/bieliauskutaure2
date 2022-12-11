@@ -395,6 +395,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                 if(BTPlayers.putIfAbsent(player.getID(),player) == null) {
                     Logger.getInstance().info(String.format("A new player has been registered: %s", player.toString()));
                     ConfigManager.getInstance().setNonParticipants(BTPlayers.values());
+                    player.updateScoreboard();
                     return true;
                 }
                 return false;
@@ -405,6 +406,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                 else
                     Logger.getInstance().info(String.format("Player %1$s was changed to %2$s", player.toString(), player.getClass().getName()));
                 saveBTPlayers();
+                player.updateScoreboard();
                 return true;
             default:
                 return false;

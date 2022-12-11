@@ -17,7 +17,6 @@ public class GlobalJoinListener implements Listener {
     {
         PlayerManager.getInstance().addBTPlayer(new Spectator(event.getPlayer().getUniqueId(),null), AddModeType.CHECK);
         BTPlayer player = PlayerManager.getInstance().getBTPlayer(event.getPlayer().getUniqueId());
-        player.updateScoreboard();
         Bukkit.getScheduler().runTask(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class), new Runnable() {
             @Override
             public void run()
@@ -30,6 +29,7 @@ public class GlobalJoinListener implements Listener {
                     else
                         MinigameManager.getInstance().getActiveGame().teleportSpectator(player);
                 }
+                player.updateScoreboard();
             }
         });
     }
