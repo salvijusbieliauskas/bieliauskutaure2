@@ -1,6 +1,7 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Participants.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -8,13 +9,35 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class Lobby extends Minigame implements Listener {
 
     public Lobby()
     {
         super(true,"Lobby", GameMode.SURVIVAL);
     }
-    private static World world = Bukkit.getServer().createWorld(new WorldCreator("NEWLOBBY"));
+    private static World world = createWorld();
+    private static World createWorld()
+    {
+        World w = Bukkit.getServer().createWorld(new WorldCreator("NEWLOBBY"));
+
+        w.setSpawnLocation(getSpawnLocation());
+
+        return w;
+    }
+    @Override
+    public Location getSpectatorSpawnLocation()
+    {
+        return(new Location(world,13.5f,61.0f,-24.5f));
+    }
+    private static Location getSpawnLocation()
+    {
+        return(new Location(world,13.5f,33.0f,-24.5f));
+    }
     @Override
     public World getWorld()
     {
@@ -39,13 +62,34 @@ public class Lobby extends Minigame implements Listener {
     @Override
     public void teleportParticipant(BTPlayer player)
     {
-        player.teleport(new Location(getWorld(),0,0,0));
+        player.teleport(getSpawnLocation());
     }
 
     @Override
-    public void teleportSpectator(BTPlayer player)
+    public boolean init()
     {
-        player.teleport(new Location(getWorld(),0,0,0));
+        Bukkit.getServer().getPluginManager().registerEvents(this, BieliauskuTaure2.getPlugin(BieliauskuTaure2.class));
+        PlayerManager.getInstance().teleportParticipants(getSpawnLocation(),false);
+        return true;
+    }
+
+    @Override
+    public boolean begin()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean end()
+    {
+        BlockDestroyEvent.getHandlerList().unregister(this);
+        return true;
+    }
+
+    @Override
+    public List<String> getScoreboardContent(UUID playerID)
+    {
+        return new ArrayList<String>();
     }
 
     @EventHandler

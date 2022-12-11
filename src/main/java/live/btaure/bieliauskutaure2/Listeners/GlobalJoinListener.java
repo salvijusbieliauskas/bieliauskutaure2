@@ -18,17 +18,19 @@ public class GlobalJoinListener implements Listener {
         PlayerManager.getInstance().addBTPlayer(new Spectator(event.getPlayer().getUniqueId(),null), AddModeType.CHECK);
         BTPlayer player = PlayerManager.getInstance().getBTPlayer(event.getPlayer().getUniqueId());
         player.updateScoreboard();
-
-        MinigameManager.getInstance().getActiveGame().applySettings(player);
-
-
-
-        if(!player.getPlayer().getLocation().getWorld().getName().equals(MinigameManager.getInstance().getActiveGame().getWorld().getName()))
-        {
-            if(player instanceof Participant)
-                MinigameManager.getInstance().getActiveGame().teleportParticipant(player);
-            else
-                MinigameManager.getInstance().getActiveGame().teleportSpectator(player);
-        }
+        Bukkit.getScheduler().runTask(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class), new Runnable() {
+            @Override
+            public void run()
+            {
+                MinigameManager.getInstance().getActiveGame().applySettings(player);
+                if(!player.getPlayer().getLocation().getWorld().getName().equals(MinigameManager.getInstance().getActiveGame().getWorld().getName()))
+                {
+                    if(player instanceof Participant)
+                        MinigameManager.getInstance().getActiveGame().teleportParticipant(player);
+                    else
+                        MinigameManager.getInstance().getActiveGame().teleportSpectator(player);
+                }
+            }
+        });
     }
 }

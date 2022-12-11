@@ -3,8 +3,12 @@ package live.btaure.bieliauskutaure2.Minigames;
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
 import live.btaure.bieliauskutaure2.Participants.Participant;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
+
+import java.util.List;
+import java.util.UUID;
 
 public abstract class Minigame implements Listener
 {
@@ -30,10 +34,27 @@ public abstract class Minigame implements Listener
         this.name = name;
         this.gameMode = gameMode;
     }
-
+    public abstract Location getSpectatorSpawnLocation();
     public abstract void applySettings(BTPlayer player);
+
+    /**
+     * puts the given player in the appropriate location(for example, if the minigame is boatrace, the player would be put in a boat.)
+     * @param player player to teleport
+     */
     public abstract void teleportParticipant(BTPlayer player);
-    public abstract void teleportSpectator(BTPlayer player);
+
+    /**
+     * teleports the given player to the location provided by getSpectatorSpawnLocation()
+     * @param player player to teleport
+     */
+    public void teleportSpectator(BTPlayer player)
+    {
+        player.teleport(getSpectatorSpawnLocation());
+    }
+    public abstract boolean init();
+    public abstract boolean begin();
+    public abstract boolean end();
+    public abstract List<String> getScoreboardContent(UUID playerID);
     /**
      * Checks whether the provided player should have minigame-specific settings applied to them
      * @param player player to check
@@ -57,5 +78,10 @@ public abstract class Minigame implements Listener
         } catch (ClassNotFoundException e) {
             return null;
         }
+    }
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

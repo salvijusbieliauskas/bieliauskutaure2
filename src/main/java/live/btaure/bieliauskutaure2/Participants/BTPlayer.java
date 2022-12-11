@@ -69,23 +69,32 @@ public abstract class BTPlayer implements ConfigurationSerializable {
         roleName.setScore(15);
         Score newLine = objective.getScore(" ");
         newLine.setScore(14);
-        if(MinigameManager.getInstance().getActiveGame() != null && !(MinigameManager.getInstance().getActiveGame() instanceof Lobby)) {
-            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Minigame: "+ChatColor.RESET+MinigameManager.getInstance().getActiveGame().name);
-            activeMinigameText.setScore(13);
-            if(getTeam()!=null) {
-                Score newLine2 = objective.getScore("  ");
-                newLine2.setScore(12);
-            }
-        }
         if(getTeam()!=null)
         {
             Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Jūsų komanda: "+ChatColor.RESET+ChatColor.GREEN+getTeam().getName());
-            activeMinigameText.setScore(11);
+            activeMinigameText.setScore(13);
             Score activeMinigameName = objective.getScore(ChatColor.BOLD+ "Taškai: "+ChatColor.GOLD+getTeam().getScore());
-            activeMinigameName.setScore(10);
+            activeMinigameName.setScore(12);
+            if(MinigameManager.getInstance().getActiveGame() != null && !(MinigameManager.getInstance().getActiveGame() instanceof Lobby)) {
+                Score newLine2 = objective.getScore("  ");
+                newLine2.setScore(11);
+            }
+        }
+        if(MinigameManager.getInstance().getActiveGame() != null && !(MinigameManager.getInstance().getActiveGame() instanceof Lobby)) {
+            Score activeMinigameText = objective.getScore(ChatColor.BOLD + "Minigame: "+ChatColor.RESET+MinigameManager.getInstance().getActiveGame().name);
+            activeMinigameText.setScore(10);
+            if(this instanceof Participant) {
+                int x = 9;
+                for (String s : MinigameManager.getInstance().getActiveGame().getScoreboardContent(getID())) {
+                    Score activeMinigameScoreboard = objective.getScore(s);
+                    activeMinigameScoreboard.setScore(x);
+                    x--;
+                }
+            }
         }
         getPlayer().setScoreboard(board);
     }
+
 
     /**
      * teleports this player to a specific location

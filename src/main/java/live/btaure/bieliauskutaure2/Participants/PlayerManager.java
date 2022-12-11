@@ -2,6 +2,7 @@ package live.btaure.bieliauskutaure2.Participants;
 
 import live.btaure.bieliauskutaure2.ConfigManager;
 import live.btaure.bieliauskutaure2.Helpers.Wrappers.Result;
+import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -424,6 +425,11 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             if(((Administrator)player).getDebugMessagesLevel() <= level)
                 player.getPlayer().sendMessage(message);
         }
+    }
+    public void applyMinigameSettings()
+    {
+        for(BTPlayer player : BTPlayers.values())
+            MinigameManager.getInstance().getActiveGame().applySettings(player);
     }
 
     /**

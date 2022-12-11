@@ -9,3 +9,5 @@ commands:
   minigame:
     description: Interacts with the MinigameManager
     usage: The command failed. /minigame <task> <args>
+  test:
+    description: xd?

@@ -2,17 +2,16 @@ package live.btaure.bieliauskutaure2;
 
 import live.btaure.bieliauskutaure2.Commands.MinigameCommand;
 import live.btaure.bieliauskutaure2.Commands.TeamCommand;
+import live.btaure.bieliauskutaure2.Commands.TestCommand;
 import live.btaure.bieliauskutaure2.Listeners.GlobalJoinListener;
 import live.btaure.bieliauskutaure2.Listeners.GlobalWeatherChangeListener;
 import live.btaure.bieliauskutaure2.Listeners.GlobalWorldLoadListener;
 import live.btaure.bieliauskutaure2.Minigames.Lobby;
 import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
-import live.btaure.bieliauskutaure2.Minigames.Parkour;
 import live.btaure.bieliauskutaure2.Participants.*;
+import live.btaure.bieliauskutaure2.Minigames.Parkour;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,7 +34,7 @@ public class BieliauskuTaure2 extends JavaPlugin {
     private void preloadWorlds()
     {
         new Lobby();
-        new Parkour();//sitas sudas padaro kad static World uzsikrautu
+        new Parkour();//sitas sudas padaro kad static World uzsikrautu. cj nera butina nes anyway yra init faze nebent kad cia mobs isjungt
         for(World w : Bukkit.getServer().getWorlds())
         {
             w.setAmbientSpawnLimit(0);
@@ -61,6 +60,8 @@ public class BieliauskuTaure2 extends JavaPlugin {
     {
         this.getCommand("team").setExecutor(new TeamCommand());
         this.getCommand("minigame").setExecutor(new MinigameCommand());
+
+        this.getCommand("test").setExecutor(new TestCommand());
     }
     private void registerGlobalListeners()
     {
