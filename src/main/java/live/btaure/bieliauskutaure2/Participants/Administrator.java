@@ -21,6 +21,7 @@ public class Administrator extends BTPlayer {
         put(PermissionType.SET_ROLE,true);
         put(PermissionType.PLACE_BLOCKS,true);
         put(PermissionType.DAMAGE_ENTITIES,true);
+        put(PermissionType.BYPASS_CHAT,true);
     }};
     public Administrator(UUID playerID, BTTeam team, int debugLevel) {
         super(playerID,team,"Administratorius", ChatColor.RED);

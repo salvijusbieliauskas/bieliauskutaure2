@@ -4,8 +4,10 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.jeff_media.customblockdata.CustomBlockData;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Participants.*;
+import live.btaure.bieliauskutaure2.SoundManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -25,8 +27,13 @@ public class Parkour extends Minigame{
     private static final World world = Bukkit.getServer().createWorld(new WorldCreator("PARKOUR"));
     private static final World worldNether = Bukkit.getServer().createWorld(new WorldCreator("world_nether"));
     private static final World worldEnd = Bukkit.getServer().createWorld(new WorldCreator("world_the_end"));
-    private final HashMap<UUID,Integer> playerCheckpointIndexes = new HashMap<UUID,Integer>();
-    private final HashMap<UUID,Location> playerCheckpointLocations = new HashMap<UUID,Location>();
+
+    public HashMap<UUID, ParkourPlayerInfo> getPlayerParkourInfo()
+    {
+        return playerParkourInfo;
+    }
+
+    private final HashMap<UUID,ParkourPlayerInfo> playerParkourInfo = new HashMap<UUID,ParkourPlayerInfo>();
     public Parkour()
     {
         super(true, "simas bega", GameMode.SURVIVAL);
@@ -53,25 +60,19 @@ public class Parkour extends Minigame{
         if(!super.performChecks(player))
             return;
         Player bukkitPlayer = player.getPlayer();
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,22));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,22));
         bukkitPlayer.setGameMode(super.getGameMode());
-        if(!playerCheckpointIndexes.containsKey(player.getID()))
-            playerCheckpointIndexes.put(player.getID(),0);
-        if(!playerCheckpointLocations.containsKey(player.getID()))
-            playerCheckpointLocations.put(player.getID(),getParticipantSpawnLocation());
-
+        player.clearPotionEffects();
+        if(!playerParkourInfo.containsKey(player.getID()))
+            playerParkourInfo.put(player.getID(),new ParkourPlayerInfo(getParticipantSpawnLocation(),0));
+        bukkitPlayer.addPotionEffects(playerParkourInfo.get(player.getID()).getPotionEffects());
     }
 
     @Override
     public void teleportParticipant(BTPlayer player)
     {
-        if(!playerCheckpointIndexes.containsKey(player.getID()))
-        {
-            playerCheckpointIndexes.put(player.getID(),0);
-            playerCheckpointLocations.put(player.getID(),getParticipantSpawnLocation());
-        }
-        player.teleport(playerCheckpointLocations.get(player.getID()));
+        if(!playerParkourInfo.containsKey(player.getID()))
+            playerParkourInfo.put(player.getID(),new ParkourPlayerInfo(getParticipantSpawnLocation(),0));
+        player.teleport(playerParkourInfo.get(player.getID()).getCheckpointLocation().setDirection(player.getPlayer().getLocation().getDirection()));
     }
 
     @Override
@@ -102,8 +103,10 @@ public class Parkour extends Minigame{
     @Override
     public List<String> getScoreboardContent(UUID playerID)
     {
+        if(!playerParkourInfo.containsKey(playerID))
+            return new ArrayList<String>();
         return new ArrayList<String>(){{
-           add(ChatColor.GOLD+""+ChatColor.BOLD+"CHECKPOINT: "+ChatColor.WHITE+""+ChatColor.BOLD+playerCheckpointIndexes.get(playerID)+"/"+15);
+           add(ChatColor.GOLD+""+ChatColor.BOLD+"CHECKPOINT: "+ChatColor.WHITE+""+ChatColor.BOLD+playerParkourInfo.get(playerID).getCheckpointIndex()+"/"+15);
         }};
     }
 
@@ -112,6 +115,10 @@ public class Parkour extends Minigame{
     {
         if (e.getFrom().getBlockX() == e.getTo().getBlockX() && e.getFrom().getBlockY() == e.getTo().getBlockY() && e.getFrom().getBlockZ() == e.getTo().getBlockZ())
             return;
+        if(e.getTo().getBlockX() < -4 && e.getTo().getBlockY()>=53 && e.getTo().getBlockZ()>25) {
+            e.setTo(new Location(worldNether, 195.5, 43.1, -405.5,e.getTo().getYaw()+90,e.getTo().getPitch()));
+            return;
+        }
         if(!e.getPlayer().getGameMode().equals(GameMode.SURVIVAL))
             return;
         if (e.getTo().getBlockY() < 34) {
@@ -123,29 +130,51 @@ public class Parkour extends Minigame{
             e.setTo(getParticipantSpawnLocation());
             return;
         }
+        if(!playerParkourInfo.containsKey(e.getPlayer().getUniqueId()))
+            return;
         if(CustomBlockData.hasCustomBlockData(e.getTo().clone().subtract(0,1,0).getBlock(),BieliauskuTaure2.getPlugin(BieliauskuTaure2.class)))
         {
             CustomBlockData data = new CustomBlockData(e.getTo().clone().subtract(0,1,0).getBlock(),BieliauskuTaure2.getPlugin(BieliauskuTaure2.class));
             int checkpointNum = data.get(new NamespacedKey(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class),"checkpoint"), PersistentDataType.INTEGER);
-            if(!playerCheckpointIndexes.containsKey(e.getPlayer().getUniqueId()))
-            {
-                playerCheckpointIndexes.put(e.getPlayer().getUniqueId(),0);
-            }
-            if(playerCheckpointIndexes.get(e.getPlayer().getUniqueId()) == checkpointNum-1) {
-                playerCheckpointIndexes.put(e.getPlayer().getUniqueId(), checkpointNum);
-                playerCheckpointLocations.put(e.getPlayer().getUniqueId(),e.getTo());
-                e.getPlayer().playSound(e.getPlayer().getLocation(),Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR,1.0f,1.0f);
+            if(playerParkourInfo.get(e.getPlayer().getUniqueId()).getCheckpointIndex() == checkpointNum-1) {
+                playerParkourInfo.get(e.getPlayer().getUniqueId()).setCheckpointIndex(checkpointNum);
+                playerParkourInfo.get(e.getPlayer().getUniqueId()).setCheckpointLocation(e.getTo());
+                SoundManager.getInstance().playSound(PlayerManager.getInstance().getBTPlayer(e.getPlayer()), SoundManager.getInstance().parkourCheckpointSound);
                 PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId()).updateScoreboard();
+                applySettings(e.getPlayer());
                 return;
             }
         }
-        if(!playerCheckpointIndexes.containsKey(e.getPlayer().getUniqueId()))
-            return;
-        if(e.getTo().getBlockX() < -4 && playerCheckpointIndexes.get(e.getPlayer().getUniqueId())==3) {
-            e.setTo(new Location(worldNether, 195.5, 43.1, -405.5,180,0));
-            return;
+        switch(playerParkourInfo.get(e.getPlayer().getUniqueId()).getCheckpointIndex())
+        {
+            case 6:
+                if(e.getTo().getBlockY()>=106 && e.getTo().getBlockX() > 474)
+                {
+                    e.getTo().add(5,-44,0);
+                    return;
+                }
+                break;
+            case 5:
+                if((e.getTo().getBlockX()>348 && e.getTo().getBlockX()<353) && (e.getTo().getBlockZ() < -479 && e.getTo().getBlockZ()> -496))
+                {
+                    e.getTo().add(109, 2, 0);
+                    return;
+                }
+            case 4:
+                if(e.getTo().getBlock().getType().equals(Material.LAVA))
+                {
+                    teleportParticipant(PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId()));
+                    return;
+                }
+            case 8:
+            case 9:
+                if(e.getTo().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.BLACK_STAINED_GLASS))
+                {
+                    teleportParticipant(PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId()));
+                    return;
+                }
+                break;
         }
-
     }
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e)
@@ -182,5 +211,80 @@ public class Parkour extends Minigame{
         if(PlayerManager.getInstance().getBTPlayer(e.getPlayer().getUniqueId()).getPermissions().get(PermissionType.PLACE_BLOCKS))
             return;
         e.setCancelled(true);
+    }
+}
+class ParkourPlayerInfo
+{
+    public void setCheckpointLocation(Location checkpointLocation)
+    {
+        this.checkpointLocation = checkpointLocation;
+    }
+
+    public void setCheckpointIndex(int checkpointIndex)
+    {
+        this.checkpointIndex = checkpointIndex;
+    }
+
+    private Location checkpointLocation;
+
+    public ParkourPlayerInfo(Location checkpointLocation, int checkpointIndex)
+    {
+        this.checkpointLocation = checkpointLocation;
+        this.checkpointIndex = checkpointIndex;
+    }
+
+    public Location getCheckpointLocation()
+    {
+        return checkpointLocation;
+    }
+
+    public int getCheckpointIndex()
+    {
+        return checkpointIndex;
+    }
+
+    private int checkpointIndex;
+    public List<PotionEffect> getPotionEffects()
+    {
+        if(checkpointIndex<3)
+        {
+            return new ArrayList<PotionEffect>()
+            {
+                {
+                    add(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,22));
+                    add(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,22));
+                }
+            };
+        }
+        if(checkpointIndex<6)
+        {
+            return new ArrayList<PotionEffect>()
+            {
+                {
+                    add(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,22));
+                }
+            };
+        }
+        if(checkpointIndex<8)
+        {
+            return new ArrayList<PotionEffect>()
+            {
+                {
+                    add(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,22));
+                    add(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,4));
+                }
+            };
+        }
+        if(checkpointIndex<20)
+        {
+            return new ArrayList<PotionEffect>()
+            {
+                {
+                    add(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE,21));
+                    add(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,3));
+                }
+            };
+        }
+        return new ArrayList<PotionEffect>();
     }
 }

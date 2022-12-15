@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.*;
 
 import java.util.HashMap;
@@ -93,6 +94,14 @@ public abstract class BTPlayer implements ConfigurationSerializable {
             }
         }
         getPlayer().setScoreboard(board);
+    }
+
+    public void clearPotionEffects()
+    {
+        if(!isOnline())
+            return;
+        for(PotionEffect potionEffect : getPlayer().getActivePotionEffects())
+            getPlayer().removePotionEffect(potionEffect.getType());
     }
 
 

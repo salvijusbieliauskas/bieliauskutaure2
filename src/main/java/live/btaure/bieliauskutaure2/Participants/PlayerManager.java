@@ -4,6 +4,7 @@ import live.btaure.bieliauskutaure2.ConfigManager;
 import live.btaure.bieliauskutaure2.Helpers.Wrappers.Result;
 import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,6 +188,15 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
     {
         return BTPlayers.get(ID);
     }
+    /**
+     * Gets and returns a player by his Bukkit Player instance
+     * @param player UUID of the player to find
+     * @return a BTPlayer instance of matching player. null if not found
+     */
+    public BTPlayer getBTPlayer(Player player)
+    {
+        return BTPlayers.get(player.getUniqueId());
+    }
 
     /**
      * Gets a player by his name.
@@ -202,6 +212,10 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
             return BTPlayers.get(result.getResult());
         else
             return null;
+    }
+    public List<BTPlayer> getBTPlayers()
+    {
+        return BTPlayers.values().stream().toList();
     }
     /**
      * @return the count of registered teams
@@ -362,7 +376,6 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
         Logger.getInstance().error(message.toString().trim());
         return invalidTeams;
     }
-
     /**
      * Checks if a player with the given UUID exists in this manager
      * @param ID UUID of the player to check
@@ -404,7 +417,7 @@ public class PlayerManager//TOOD:pertvarkyti teamu struktura
                 if(BTPlayers.put(player.getID(),player) == null)
                     Logger.getInstance().warning(String.format("A new player has been registered: %s", player.toString()));
                 else
-                    Logger.getInstance().info(String.format("Player %1$s was changed to %2$s", player.toString(), player.getClass().getName()));
+                    Logger.getInstance().info(String.format("Player %1$s was changed to %2$s", player.toString(), player.getClass().getSimpleName()));
                 saveBTPlayers();
                 player.updateScoreboard();
                 return true;

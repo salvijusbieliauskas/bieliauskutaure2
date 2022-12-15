@@ -38,16 +38,8 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>otherOutputDir</id>
-            <build>
-                <directory>C:\Projects\mc bieliausku taure 2\serveris\plugins</directory>
-            </build>
-        </profile>
-    </profiles>
     <build>
-        <outputDirectory>C:\Projects\mc bieliausku taure 2\serveris\plugins</outputDirectory>
+        <outputDirectory>D:\Projects\MC BIEL TAURE 2022\serveris\plugins</outputDirectory>
         <finalName>BieliauskuTaure2</finalName>
         <plugins>
             <plugin>

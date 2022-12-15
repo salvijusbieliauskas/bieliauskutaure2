@@ -2,9 +2,11 @@ package live.btaure.bieliauskutaure2.Minigames;
 
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
 import live.btaure.bieliauskutaure2.Participants.Participant;
+import live.btaure.bieliauskutaure2.Participants.PlayerManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import java.util.List;
@@ -36,6 +38,10 @@ public abstract class Minigame implements Listener
     }
     public abstract Location getSpectatorSpawnLocation();
     public abstract void applySettings(BTPlayer player);
+    public void applySettings(Player player)
+    {
+        applySettings(PlayerManager.getInstance().getBTPlayer(player));
+    }
 
     /**
      * puts the given player in the appropriate location(for example, if the minigame is boatrace, the player would be put in a boat.)
