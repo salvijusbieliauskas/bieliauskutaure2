@@ -2,7 +2,6 @@ package live.btaure.bieliauskutaure2;
 
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
 import live.btaure.bieliauskutaure2.Participants.BTTeam;
-import live.btaure.bieliauskutaure2.Participants.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;

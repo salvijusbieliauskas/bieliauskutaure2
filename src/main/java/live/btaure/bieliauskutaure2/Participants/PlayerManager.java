@@ -2,6 +2,7 @@ package live.btaure.bieliauskutaure2.Participants;
 
 import live.btaure.bieliauskutaure2.ConfigManager;
 import live.btaure.bieliauskutaure2.Helpers.Wrappers.Result;
+import live.btaure.bieliauskutaure2.Logger;
 import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

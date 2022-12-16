@@ -2,26 +2,20 @@ package live.btaure.bieliauskutaure2.Commands;
 
 import com.jeff_media.customblockdata.CustomBlockData;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
-import live.btaure.bieliauskutaure2.ChatMessageManager;
-import live.btaure.bieliauskutaure2.Minigames.MinigameManager;
+import live.btaure.bieliauskutaure2.Chat.ChatMessageManager;
+import live.btaure.bieliauskutaure2.Chat.ChatPattern;
+import live.btaure.bieliauskutaure2.Chat.MinecraftFont;
 import live.btaure.bieliauskutaure2.SoundManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.map.MapFont;
-import org.bukkit.map.MinecraftFont;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import live.btaure.bieliauskutaure2.Minigames.Parkour;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class TestCommand implements CommandExecutor {
     @Override
@@ -62,6 +56,7 @@ public class TestCommand implements CommandExecutor {
             Block block = player.getWorld().getBlockAt(player.getLocation().toBlockLocation().subtract(0,1,0));
             PersistentDataContainer customBlockdata = new CustomBlockData(block, BieliauskuTaure2.getPlugin(BieliauskuTaure2.class));
             NamespacedKey key = new NamespacedKey(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class),"checkpoint");
+            //player.sendMessage("XD?");
             if(customBlockdata.has(key, PersistentDataType.INTEGER)) {
                 player.sendMessage(customBlockdata.get(key,PersistentDataType.INTEGER).toString());
             }
@@ -84,7 +79,7 @@ public class TestCommand implements CommandExecutor {
             }
             String joined = String.join(" ",argsArray);
 
-            ChatMessageManager.getInstance().broadcastMessage(joined, SoundManager.getInstance().chatNotificationSound);
+            ChatMessageManager.getInstance().broadcastMessage(joined, SoundManager.getInstance().chatNotificationSound, new ChatPattern[0]);
 
         }
         else if(strings[0].equalsIgnoreCase("validate"))
@@ -99,11 +94,15 @@ public class TestCommand implements CommandExecutor {
         }
         else if(strings[0].equalsIgnoreCase("sudas"))
         {
-            /*for(MinecraftCharacter letter : ChatMessageManager.getInstance().getLithuanianLetters())
-            {
-                commandSender.sendMessage(ChatColor.BOLD+String.valueOf(letter.getCharacter())+ChatColor.RESET+'L');
-                commandSender.sendMessage(String.valueOf(letter.getCharacter())+'L');
-            }*/
+            commandSender.sendMessage(String.valueOf(ChatMessageManager.getInstance().getLength("š")));
+            commandSender.sendMessage(String.valueOf(ChatMessageManager.getInstance().getLength(ChatColor.BOLD+"š")));
+        }
+        else if(strings[0].equalsIgnoreCase("p"))
+        {
+            commandSender.sendMessage(String.valueOf(ChatMessageManager.getInstance().getLength(strings[1])));
+            commandSender.sendMessage(String.valueOf(ChatMessageManager.getInstance().getLength(ChatColor.BOLD+strings[1])));
+            commandSender.sendMessage(strings[1]+'L');
+            commandSender.sendMessage(ChatColor.BOLD+strings[1]+ChatColor.RESET+'L');
         }
 
         return true;

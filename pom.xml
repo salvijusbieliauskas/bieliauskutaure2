@@ -9,14 +9,14 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
         <repository>
-            <id>papermc</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
+            <id>purpur</id>
+            <url>https://repo.purpurmc.org/snapshots</url>
         </repository>
         <repository>
             <id>jeff-media-public</id>
@@ -26,9 +26,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <groupId>org.purpurmc.purpur</groupId>
+            <artifactId>purpur-api</artifactId>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -39,7 +39,6 @@
         </dependency>
     </dependencies>
     <build>
-        <outputDirectory>D:\Projects\MC BIEL TAURE 2022\serveris\plugins</outputDirectory>
         <finalName>BieliauskuTaure2</finalName>
         <plugins>
             <plugin>
@@ -53,14 +52,13 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <finalName>${project.artifactId}-${project.version}</finalName>
                             <relocations>
                                 <relocation>
                                     <pattern>com.jeff_media.customblockdata</pattern>
                                     <shadedPattern>live.btaure.bieliauskutaure2.customblockdata</shadedPattern>
                                 </relocation>
                             </relocations>
+                            <outputFile>D:\Projects\MC BIEL TAURE 2022\serveris\plugins\${project.artifactId}-${project.version}.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>

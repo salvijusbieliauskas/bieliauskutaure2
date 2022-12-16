@@ -1,14 +1,14 @@
-package live.btaure.bieliauskutaure2;
+package live.btaure.bieliauskutaure2.Chat;
 
+import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Helpers.Wrappers.Result;
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
-import live.btaure.bieliauskutaure2.Participants.Logger;
+import live.btaure.bieliauskutaure2.Logger;
 import live.btaure.bieliauskutaure2.Participants.PlayerManager;
+import live.btaure.bieliauskutaure2.SoundManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.map.MapFont;
-import org.bukkit.map.MinecraftFont;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +22,10 @@ public class ChatMessageManager
     private static final MinecraftCharacter borderTopRight = new MinecraftCharacter('╗',7);
     private static final MinecraftCharacter borderBottomLeft = new MinecraftCharacter('╚',8);
     private static final MinecraftCharacter borderBottomRight = new MinecraftCharacter('╝',7);
+    private static final ChatColor constantBorderColor = ChatColor.GOLD;
+    private static final ChatColor constantFillerColor = ChatColor.DARK_AQUA;
+    private static final ChatColor constantCaptionColor = ChatColor.RED;
+    private static final MinecraftCharacter whatCharacter = new MinecraftCharacter(ChatColor.COLOR_CHAR,5);
     /*private static final MinecraftCharacter filler9 = new MinecraftCharacter('▒',9);
     private static final MinecraftCharacter filler7 = new MinecraftCharacter('░',7);*/
     //private static final MinecraftCharacter filler6 = new MinecraftCharacter('■',5);
@@ -66,6 +70,7 @@ public class ChatMessageManager
         customFont.setChar(filler7.getCharacter(),filler7.asCharacterSprite());*/
         customFont.setChar(filler4.getCharacter(), filler4.asCharacterSprite());
         //customFont.setChar(filler6.getCharacter(),filler6.asCharacterSprite());
+        customFont.setChar(whatCharacter.getCharacter(), whatCharacter.asCharacterSprite());
         for(MinecraftCharacter character : lithuanianLetters)
         {
             customFont.setChar(character.getCharacter(),character.asCharacterSprite());
@@ -77,6 +82,149 @@ public class ChatMessageManager
         if(chatMessageManagerInstance == null)
             chatMessageManagerInstance = new ChatMessageManager();
         return chatMessageManagerInstance;
+    }
+    private boolean isBold(String string, int index)
+    {
+        //find last symbol looking backwards, if it's the bold symbol return true.
+        for(int x = index-1; x>=0;x--)
+        {
+            if(string.charAt(x)=='§')
+            {
+                return string.charAt(x + 1) == 'l';
+            }
+        }
+        return false;
+    }
+    private int getCharLength(String string)
+    {
+        //find last symbol looking backwards, if it's the bold symbol return true.
+        int sizeMod = 0;
+        for(int x = 0; x<string.length();x++)
+        {
+            if(string.charAt(x)=='§'&&x!=string.length()-1)
+            {
+                sizeMod-=2;
+            }
+        }
+        return string.length()+sizeMod;
+    }
+    private String strip(String string)
+    {
+        StringBuilder stringBuilder = new StringBuilder(string);
+        for(int x = 0; x < stringBuilder.length();x++)
+        {
+            if(stringBuilder.charAt(x)=='§')
+            {
+                stringBuilder.delete(x,x+2);
+                x--;
+            }
+        }
+        return stringBuilder.toString();
+    }
+    private boolean patternFits(String[] originalMessage,int[][] pattern, boolean hasBorder, LocationType location)
+    {
+        int xSize = pattern[0].length;
+        int ySize = pattern.length;
+        if((hasBorder?-2:0)+ originalMessage.length<ySize)
+            return false;
+        for(int x = hasBorder?1:0;x<(hasBorder? originalMessage.length-1 : originalMessage.length);x++)
+        {
+            int yStart=Integer.MAX_VALUE;
+            int yEnd=Integer.MAX_VALUE;
+            if(location.equals(LocationType.LEFT))
+            {
+                yStart = (hasBorder ? 1 : 0);
+                yEnd = yStart+xSize+1;
+            }
+            else if(location.equals(LocationType.RIGHT))
+            {
+                yEnd = (hasBorder ? strip(originalMessage[x]).length() - 1 : strip(originalMessage[x]).length());
+                yStart = yEnd-xSize-1;
+            }
+            if(countChars(strip(originalMessage[x]).substring(yStart,yEnd), filler4.getCharacter())<xSize)
+                return false;
+        }
+        return true;
+    }
+    private Result<String[]> insertPattern(String[] originalMessage, ChatColor originalColor, boolean hasBorder, ChatPattern pattern)
+    {
+        int xSize = pattern.getPattern()[0].length;
+        int ySize = pattern.getPattern().length;
+        String[] modifiedMessage = originalMessage.clone();
+        if(!patternFits(originalMessage,pattern.getPattern(),hasBorder,pattern.getLocation()))
+        {
+            return new Result<String[]>(null,false);
+        }
+
+        for(int x = hasBorder?1:0;x<(hasBorder? originalMessage.length-1 : originalMessage.length);x++)
+        {
+            int yStart=Integer.MAX_VALUE;
+            int yEnd=Integer.MAX_VALUE;
+            int yModifier = Integer.MAX_VALUE;
+            int lastIndex = Integer.MAX_VALUE;
+            if(pattern.getLocation().equals(LocationType.LEFT))
+            {
+                yStart = 0;
+                yEnd = xSize;
+                yModifier=1;
+                lastIndex=-1;
+            }
+            else if(pattern.getLocation().equals(LocationType.RIGHT))
+            {
+                yStart = xSize-1;
+                yEnd = -1;
+                lastIndex=modifiedMessage[x].length()-1;
+                yModifier=-1;
+            }
+            for(int y = yStart; y != yEnd; )
+            {
+                if(pattern.getLocation().equals(LocationType.LEFT))
+                    lastIndex = getNextChar(modifiedMessage[x], lastIndex);
+                else if(pattern.getLocation().equals(LocationType.RIGHT))
+                    lastIndex = getPreviousChar(modifiedMessage[x], lastIndex);
+                if(lastIndex==-1)
+                    return new Result<String[]>(null,false);
+                if(modifiedMessage[x].charAt(lastIndex)== filler4.getCharacter())
+                {
+                    if(pattern.getPattern()[hasBorder?x-1:x][y] != 0)
+                    {
+                        String changedColor = setColorAtIndex(modifiedMessage[x], lastIndex, originalColor,getColorByNumber(pattern.getPattern()[hasBorder?x-1:x][y]),isBold(modifiedMessage[x], lastIndex),isBold(modifiedMessage[x], lastIndex));
+                        if (pattern.getLocation().equals(LocationType.LEFT))
+                            lastIndex += (changedColor.length() - modifiedMessage[x].length());
+                        modifiedMessage[x] = changedColor;
+                    }
+                    y+=yModifier;
+                }
+            }
+
+        }
+
+
+        return new Result<String[]>(modifiedMessage,true);
+    }
+    private ChatColor getColorByNumber(int number)
+    {
+        switch(number)
+        {
+            case 1:
+                return ChatColor.RED;
+            default:
+                return ChatColor.WHITE;
+        }
+    }
+    private String setColorAtIndex(String string, int index, ChatColor originalColor, ChatColor newColor, boolean newBold, boolean originalBold)
+    {
+        StringBuilder stringBuilder = new StringBuilder(string);
+        //add after effects.
+        if(originalBold)
+            stringBuilder.insert(index+1,ChatColor.BOLD);
+        stringBuilder.insert(index+1,originalColor);
+        stringBuilder.insert(index+1,ChatColor.RESET);
+        if(newBold)
+            stringBuilder.insert(index,ChatColor.BOLD);
+        stringBuilder.insert(index,newColor);
+        stringBuilder.insert(index, ChatColor.RESET);
+        return stringBuilder.toString();
     }
     private StringBuilder insert(StringBuilder stringBuilder, char symbol, ChatColor fillerColor, int fillerNum, boolean bold, int toInvert, int leftExclusionSize, int rightExclusionSize, boolean sizeTest, int addedLeft)
     {
@@ -130,21 +278,14 @@ public class ChatMessageManager
         if(bold)
         {
             int boldLength = getLength(ChatColor.BOLD+String.valueOf(symbol));
-            /*if(symbol == filler4.getCharacter())
-                toInvert = boldLength-((widthPx-getLength(filled.toString())+scuffedLength)%boldLength);
-            else*/
             toInvert = boldLength-((widthPx-getLength(filled.toString()))%boldLength);
             if(toInvert==boldLength)
                 toInvert = 0;
-            Logger.getInstance().info("bold length: "+String.valueOf(boldLength));
-            Logger.getInstance().info("to invert: "+String.valueOf(toInvert));
-            Logger.getInstance().info("(widthPx-getLength(filled.toString())+scuffedLength): "+(widthPx-getLength(filled.toString())));
         }
         else
         {
             int length = getLength(String.valueOf(symbol));
             toInvert = (widthPx-getLength(filled.toString()))%length;
-            Logger.getInstance().info(String.valueOf(toInvert));
         }
         int borderNum = 0;
         if(bold)
@@ -172,9 +313,9 @@ public class ChatMessageManager
         filled.insert(leftExclusionSize+2+addedLeft,ChatColor.RESET);
         return new Result<String>(filled.toString(),true);
     }
-    private Result<String[]> addBorder(List<String> message, int widthPx, ChatColor borderColor, ChatColor captionColor)
+    private Result<String[]> addBorder(String[] message, int widthPx, ChatColor borderColor, ChatColor captionColor)
     {
-        String[] bordered = new String[message.size()+2];
+        String[] bordered = new String[message.length+2];
         Result<String> topFillResult = fill(borderColor+""+borderTopLeft+""+captionColor+""+ChatColor.BOLD+captionText+borderColor+borderTopRight, borderHorizontal.getCharacter(), 3,3, widthPx, borderColor,false);
         if(!topFillResult.isSuccessful())
             return new Result<>(null,false);
@@ -184,24 +325,47 @@ public class ChatMessageManager
             return new Result<>(null,false);
         bordered[0] = topFillResult.getResult();
         bordered[bordered.length-1] = bottomFillResult.getResult();
-        for(int x = 0; x < message.size();x++)
+        for(int x = 0; x < message.length;x++)
         {
-            bordered[x+1] = borderColor+""+borderVertical+ChatColor.RESET+message.get(x)+ChatColor.RESET+borderColor+borderVertical;
+            bordered[x+1] = borderColor+""+borderVertical+ChatColor.RESET+message[x]+ChatColor.RESET+borderColor+borderVertical;
             if(getLength(bordered[x+1])>lineLengthPx)
                 return new Result<String[]>(null,false);
         }
         return new Result<String[]>(bordered, true);
     }
-    private char getNextChar(String str, int index)
+    private int getNextChar(String str, int index)
     {
         for(int x = index+1; x < str.length();)
         {
             if(str.charAt(x)=='§')
                 x+=2;
             else
-                return str.charAt(x);
+                return x;
         }
-        return '§';
+        return -1;
+    }
+    private int getPreviousChar(String str, int index)
+    {
+        for(int x = index-1; x >= 0;)
+        {
+            if(str.charAt(x-1)=='§')
+                x-=2;
+            else if(str.charAt(x)=='§')
+                x-=1;
+            else
+                return x;
+        }
+        return -1;
+    }
+    private int countChars(String str, char character)
+    {
+        int count = 0;
+        for(int x = 0;x < str.length(); x++)
+        {
+            if(str.charAt(x) == character)
+                count++;
+        }
+        return count;
     }
     private boolean isLithuanianLetter(char character)
     {
@@ -229,23 +393,42 @@ public class ChatMessageManager
                     }
                     for(int y = x+2; y < index;y++)
                     {
-                        if(isLithuanianLetter(str.charAt(y)))
-                            sizeMod+=0.5f;
-                        else
-                            sizeMod++;
+                        sizeMod++;
                     }
                 }
             }
+            else if(str.charAt(x)=='('||str.charAt(x)==')')
+                sizeMod--;
         }
 
         return customFont.getWidth(str)+Math.round(sizeMod+1);//not a fucking clue kodel reikia 1 pridet
     }
-    public Result<String[]> constructMessage(List<String> message, boolean border, int height, int maxWidth)
+    private int getLongestStringIndex(String[] stringArr)
+    {
+        int longest = 0;
+        for(int x = 1; x < stringArr.length;x++)
+        {
+            if(getLength(stringArr[x])>getLength(stringArr[longest]))
+                longest = x;
+        }
+        return longest;
+    }
+    private String getLongestString(String[] stringArr)
+    {
+        return stringArr[getLongestStringIndex(stringArr)];
+    }
+    public Result<String[]> constructMessage(String[] message, boolean border, int height, int maxWidth, ChatColor borderColor, ChatColor captionColor, ChatColor fillerColor, ChatPattern[] patterns)
     {
         int width = Math.min(maxWidth, lineLengthPx);
-        height = Math.max(message.size(), height);
-        List<String> clonedMessage = new ArrayList<>(message);
-        int sizeDiff = height- message.size();
+        int estimatedTextSize = getLength((border?String.valueOf(borderVertical.getCharacter())+String.valueOf(borderVertical.getCharacter()):"")+getLongestString(message));
+        if(estimatedTextSize>width)
+        {
+            Logger.getInstance().warning("Failed to construct a message, because the contents were too long.");
+            return new Result<String[]>(null, false);
+        }
+        height = Math.max(message.length, height);
+        List<String> clonedMessage = new ArrayList<String>(List.of(message.clone()));
+        int sizeDiff = height- message.length;
         for(int x = 0; x < sizeDiff;x++)
         {
             if(x%2==0)
@@ -256,7 +439,7 @@ public class ChatMessageManager
         String[] constructedMessage;
         if(border)
         {
-            Result<String[]> addBorderResult = addBorder(clonedMessage,width, ChatColor.GOLD,ChatColor.RED);
+            Result<String[]> addBorderResult = addBorder(clonedMessage.toArray(new String[0]),width, borderColor,captionColor);
             if(!addBorderResult.isSuccessful())
                 return new Result<String[]>(null,false);
             constructedMessage = addBorderResult.getResult();
@@ -270,12 +453,28 @@ public class ChatMessageManager
             width = getLength(constructedMessage[0]);
         for(int x = border?1:0;x < (border?constructedMessage.length-1:constructedMessage.length);x++)
         {
-            Result<String> fillResult =  fill(constructedMessage[x], filler4.getCharacter(),border?5:0,border?3:0,width, ChatColor.GRAY,true);
+            Result<String> fillResult =  fill(constructedMessage[x], filler4.getCharacter(),border?5:0,border?3:0,width, fillerColor,true);
             if(!fillResult.isSuccessful())
                 return new Result<String[]>(null,false);
             else
                 constructedMessage[x] = fillResult.getResult();
         }
+        if(patterns.length>0)
+        {
+            for(ChatPattern pattern : patterns)
+            {
+                Result<String[]>  patterInsertResult = insertPattern(constructedMessage, fillerColor, border, pattern);
+                if(patterInsertResult.isSuccessful())
+                    constructedMessage = patterInsertResult.getResult();
+                else
+                {
+                    Logger.getInstance().warning("Failed inserting pattern while constructing message.");
+                    return new Result<String[]>(null,false);
+                }
+            }
+        }
+
+
         return new Result<String[]>(constructedMessage,true);
     }
     private String joinMessage(String[] splitMessage)
@@ -283,23 +482,54 @@ public class ChatMessageManager
         StringBuilder sb = new StringBuilder();
         for(String message : splitMessage)
         {
-            Logger.getInstance().info(message);
-            Logger.getInstance().info("size: "+getLength(message));
             sb.append(message);
             sb.append('\n');
         }
         return sb.toString();
     }
-    public boolean broadcastMessage(String message, Sound soundToPlay)
+    private int[] getWordCount(String[][] messages)
     {
-        return broadcastMessage(new ArrayList<String>(){{add(message);}},soundToPlay);
+        int[] counts = new int[messages.length];
+        for(int x = 0; x < messages.length;x++)
+        {
+            for(String string : messages[x])
+            {
+                if(!string.equals("")&&!string.equals(" "))
+                    counts[x]+=countChars(string, ' ')+1;
+            }
+        }
+        return counts;
     }
-    public boolean broadcastMessage(List<String> message, Sound soundToPlay)
+    public boolean broadcastMessagesWithDelay(String[][] messages, Sound soundToPlay, ChatPattern[] patterns)//TODO: add more overloads
     {
-        Result<String[]> constructedMessageResult = constructMessage(message,true, message.size() + 2,lineLengthPx);
+        int[] wordCounts = getWordCount(messages);
+        long timeSoFar=0L;
+
+        for(int x = 0; x < messages.length;x++)
+        {
+            int finalX = x;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class), new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    broadcastMessage(messages[finalX],soundToPlay,patterns);
+                }
+            },(wordCounts[x] * 10L)+timeSoFar);
+            timeSoFar+=wordCounts[x]*10L;
+        }
+        return true;
+    }
+    public boolean broadcastMessage(String message, Sound soundToPlay, ChatPattern[] patterns)
+    {
+        return broadcastMessage(new String[]{message},soundToPlay,patterns);
+    }
+    public boolean broadcastMessage(String[] message, Sound soundToPlay, ChatPattern[] patterns)
+    {
+        Result<String[]> constructedMessageResult = constructMessage(message,true, Math.max(message.length + 2,8),lineLengthPx,constantBorderColor,constantCaptionColor,constantFillerColor,patterns);
         if(!constructedMessageResult.isSuccessful())
             return false;
-        String joinedMessage = joinMessage(constructedMessageResult.getResult());
+        String joinedMessage = "\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n"+joinMessage(constructedMessageResult.getResult());
         for(BTPlayer player : PlayerManager.getInstance().getBTPlayers())
         {
             if(!player.isOnline())
@@ -310,15 +540,15 @@ public class ChatMessageManager
         }
         return true;
     }
-    public boolean sendMessage(BTPlayer player, String message, Sound soundToPlay)
+    public boolean sendMessage(BTPlayer player, String message, Sound soundToPlay, ChatPattern[] patterns)
     {
-        return sendMessage(player, new ArrayList<String>(){{add(message);}},soundToPlay);
+        return sendMessage(player, new String[]{message},soundToPlay,patterns);
     }
-    public boolean sendMessage(BTPlayer player, List<String> message, Sound soundToPlay)
+    public boolean sendMessage(BTPlayer player, String[] message, Sound soundToPlay, ChatPattern[] patterns)
     {
         if(!player.isOnline())
             return false;
-        Result<String[]> constructedMessageResult = constructMessage(message,true, message.size() + 2,lineLengthPx);
+        Result<String[]> constructedMessageResult = constructMessage(message,true, message.length + 2,lineLengthPx,constantBorderColor,constantCaptionColor,constantFillerColor, patterns);
         if(!constructedMessageResult.isSuccessful())
             return false;
         String joinedMessage = joinMessage(constructedMessageResult.getResult());
@@ -329,38 +559,3 @@ public class ChatMessageManager
     }
 }
 
-class MinecraftCharacter
-{
-    private final char character;
-    private final int width;
-    public MinecraftCharacter(char character, int width)
-    {
-        this.character = character;
-        this.width = width;
-    }
-
-    public char getCharacter()
-    {
-        return character;
-    }
-    public int getWidth()
-    {
-        return width;
-    }
-    @Override
-    public boolean equals(Object other)
-    {
-        if(other instanceof MinecraftCharacter && ((MinecraftCharacter)other).getCharacter() == this.getCharacter())
-            return true;
-        else return other instanceof Character && (Character) other == this.getCharacter();
-    }
-    public MapFont.CharacterSprite asCharacterSprite()
-    {
-        return new MapFont.CharacterSprite(width,0,new boolean[0]);
-    }
-    @Override
-    public String toString()
-    {
-        return String.valueOf(character);
-    }
-}

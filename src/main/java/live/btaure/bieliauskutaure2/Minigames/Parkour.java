@@ -3,10 +3,12 @@ package live.btaure.bieliauskutaure2.Minigames;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.jeff_media.customblockdata.CustomBlockData;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
+import live.btaure.bieliauskutaure2.Chat.ChatMessageManager;
+import live.btaure.bieliauskutaure2.Chat.ChatPattern;
+import live.btaure.bieliauskutaure2.Chat.LocationType;
 import live.btaure.bieliauskutaure2.Participants.*;
 import live.btaure.bieliauskutaure2.SoundManager;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,15 +21,37 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.*;
 
 public class Parkour extends Minigame{
     private static final World world = Bukkit.getServer().createWorld(new WorldCreator("PARKOUR"));
     private static final World worldNether = Bukkit.getServer().createWorld(new WorldCreator("world_nether"));
     private static final World worldEnd = Bukkit.getServer().createWorld(new WorldCreator("world_the_end"));
-
+    private static final ChatPattern parkourPatternLeft=new ChatPattern(new int[][]{
+            {0,0,0,0,0,0,0,1,1},
+            {0,0,0,0,1,1,1,1,0},
+            {0,0,0,1,0,0,1,1,0},
+            {0,0,0,0,0,1,0,0,1},
+            {0,0,0,0,1,0,0,0,0},
+            {0,1,0,1,0,1,0,0,0},
+            {0,0,1,0,0,0,1,0,0},
+            {0,0,0,0,0,1,0,0,0}
+    }, LocationType.LEFT);
+    private static final ChatPattern parkourPatternRight=new ChatPattern(new int[][]{
+            {0,0,0,0,0,0,1,1},
+            {0,0,0,1,1,1,1,0},
+            {0,0,1,0,0,1,1,0},
+            {0,0,0,0,1,0,0,1},
+            {0,0,0,1,0,0,0,0},
+            {1,0,1,0,1,0,0,0},
+            {0,1,0,0,0,1,0,0},
+            {0,0,0,0,1,0,0,0}
+    }, LocationType.RIGHT);
+    private static final String[][] startupMessages = new String[][]{
+            {ChatColor.GREEN+""+ChatColor.BOLD+"SIMAS BĖGA NUO ŠAUKIMO","(parkour)"},
+            {ChatColor.GREEN+""+ChatColor.BOLD+"SIMAS BĖGA NUO ŠAUKIMO","",ChatColor.GREEN+"Šioje rungtyje jūs turėsite greitai bėgti"},
+            {ChatColor.GREEN+""+ChatColor.BOLD+"SIMAS BĖGA NUO ŠAUKIMO","",ChatColor.GREEN+"Nepamirškite užlipti ant švyturių",ChatColor.GREEN+"Jie išsaugo jūsų vietą ir suteikia taškų"}
+    };
     public HashMap<UUID, ParkourPlayerInfo> getPlayerParkourInfo()
     {
         return playerParkourInfo;
@@ -72,7 +96,9 @@ public class Parkour extends Minigame{
     {
         if(!playerParkourInfo.containsKey(player.getID()))
             playerParkourInfo.put(player.getID(),new ParkourPlayerInfo(getParticipantSpawnLocation(),0));
-        player.teleport(playerParkourInfo.get(player.getID()).getCheckpointLocation().setDirection(player.getPlayer().getLocation().getDirection()));
+        Location tpLocation = new Location(playerParkourInfo.get(player.getID()).getCheckpointLocation().getWorld(),playerParkourInfo.get(player.getID()).getCheckpointLocation().getBlockX()+0.5,playerParkourInfo.get(player.getID()).getCheckpointLocation().getBlockY(),playerParkourInfo.get(player.getID()).getCheckpointLocation().getBlockZ()+0.5);
+        tpLocation = tpLocation.setDirection(player.getPlayer().getLocation().getDirection());
+        player.teleport(tpLocation);
     }
 
     @Override
@@ -80,6 +106,7 @@ public class Parkour extends Minigame{
     {
         Bukkit.getServer().getPluginManager().registerEvents(this, BieliauskuTaure2.getPlugin(BieliauskuTaure2.class));
         PlayerManager.getInstance().teleportParticipants(getParticipantSpawnLocation(),false);
+        ChatMessageManager.getInstance().broadcastMessagesWithDelay(startupMessages,Sound.ENTITY_HUSK_CONVERTED_TO_ZOMBIE, new ChatPattern[]{parkourPatternLeft,parkourPatternRight});
         return true;
     }
 

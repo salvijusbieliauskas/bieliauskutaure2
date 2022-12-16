@@ -2,6 +2,7 @@ package live.btaure.bieliauskutaure2.Participants;
 
 //TODO: if team loses or gets disqualified or leaves an active minigame, members might become Spectators. this should be implemented in the manager
 
+import live.btaure.bieliauskutaure2.Logger;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.jetbrains.annotations.NotNull;
