@@ -40,6 +40,6 @@ public class SoundManager
             return;
         if(player instanceof Streamer && ((Streamer)player).isSoundEffectsMuted())
             return;
-        player.getPlayer().playSound(loc,soundToPlay,1.0f,1.0f);
+        player.getPlayer().playSound(player.getPlayer(),soundToPlay,1.0f,1.0f);
     }
 }
