@@ -58,7 +58,7 @@ public abstract class BTPlayer implements ConfigurationSerializable {
     {
         return getOfflinePlayer().getName();
     }
-    public void updateScoreboard(){//TODO:run this code a million times to check if it doesn't fill up memory
+    public void updateScoreboard(){//TODO:run this code a million times to check if it doesn't cause memory leaks
         if(!isOnline()) {
             return;
         }

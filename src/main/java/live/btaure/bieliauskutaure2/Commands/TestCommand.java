@@ -4,7 +4,6 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Chat.ChatMessageManager;
 import live.btaure.bieliauskutaure2.Chat.ChatPattern;
-import live.btaure.bieliauskutaure2.Chat.MinecraftFont;
 import live.btaure.bieliauskutaure2.SoundManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import live.btaure.bieliauskutaure2.Minigames.Parkour;
 
 public class TestCommand implements CommandExecutor {
     @Override

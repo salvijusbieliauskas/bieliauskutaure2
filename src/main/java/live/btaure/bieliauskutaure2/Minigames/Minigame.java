@@ -30,7 +30,7 @@ public abstract class Minigame implements Listener
 
     private GameMode gameMode;
 
-    Minigame(boolean allowsDisconnect, String name, GameMode gameMode)
+    protected Minigame(boolean allowsDisconnect, String name, GameMode gameMode)
     {
         this.allowsDisconnect = allowsDisconnect;
         this.name = name;
@@ -44,7 +44,7 @@ public abstract class Minigame implements Listener
     }
 
     /**
-     * puts the given player in the appropriate location(for example, if the minigame is boatrace, the player would be put in a boat.)
+     * puts the given player in the appropriate location(for example, if the minigame is boatrace, the player would be put in a boat at the starting line)
      * @param player player to teleport
      */
     public abstract void teleportParticipant(BTPlayer player);

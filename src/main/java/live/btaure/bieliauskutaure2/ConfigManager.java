@@ -30,7 +30,7 @@ public class ConfigManager
             return new ArrayList<BTTeam>();
         return (List<BTTeam>) plugin.getConfig().get("teams");
     }
-    private void save()
+    public void save()
     {
         plugin.saveConfig();
         Logger.getInstance().info("Configuration updated and saved");
