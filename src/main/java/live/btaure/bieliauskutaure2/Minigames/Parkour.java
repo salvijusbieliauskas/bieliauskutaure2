@@ -1,7 +1,6 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import io.papermc.paper.math.BlockPosition;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
 import live.btaure.bieliauskutaure2.Chat.ChatMessageManager;
 import live.btaure.bieliauskutaure2.Chat.ChatPattern;
@@ -200,7 +199,7 @@ public class Parkour extends Minigame
         if(playerInfo.currentCheckpoint.index >= standingCheckpoint.index)
             return;
         playerInfo.currentCheckpoint = standingCheckpoint;
-        e.getPlayer().playSound(e.getPlayer(),Sound.BLOCK_NOTE_BLOCK_BELL,1.0f,1.0f);
+        e.getPlayer().playSound(e.getPlayer().getLocation(),Sound.BLOCK_NOTE_BLOCK_BELL,1.0f,1.0f);
         PlayerManager.getInstance().getBTPlayer(e.getPlayer()).updateScoreboard();
 
         /*if(CustomBlockData.hasCustomBlockData(e.getTo().clone().subtract(0,1,0).getBlock(),BieliauskuTaure2.getPlugin(BieliauskuTaure2.class)))
