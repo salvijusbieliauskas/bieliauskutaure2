@@ -11,6 +11,7 @@ import live.btaure.bieliauskutaure2.Minigames.Parkour;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BieliauskuTaure2 extends JavaPlugin {
@@ -35,10 +36,9 @@ public class BieliauskuTaure2 extends JavaPlugin {
         new Parkour();//sitas sudas padaro kad static World uzsikrautu. cj nera butina nes anyway yra init faze nebent kad cia mobs isjungt
         for(World w : Bukkit.getServer().getWorlds())
         {
-            w.setAmbientSpawnLimit(0);
-            w.setMonsterSpawnLimit(0);
-            w.setWaterAmbientSpawnLimit(0);
-            w.setWaterAnimalSpawnLimit(0);
+            for(SpawnCategory category : SpawnCategory.values()) {
+                w.setSpawnLimit(category,0);
+            }
         }
     }
     @Override
