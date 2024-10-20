@@ -11,11 +11,12 @@ import live.btaure.bieliauskutaure2.Minigames.Parkour;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public class BieliauskuTaure2 extends JavaPlugin {
-    private ConfigManager configManager;
-    private PlayerManager playerManager;
     @Override
     public void onEnable()
     {
@@ -35,10 +36,9 @@ public class BieliauskuTaure2 extends JavaPlugin {
         new Parkour();//sitas sudas padaro kad static World uzsikrautu. cj nera butina nes anyway yra init faze nebent kad cia mobs isjungt
         for(World w : Bukkit.getServer().getWorlds())
         {
-            w.setAmbientSpawnLimit(0);
-            w.setMonsterSpawnLimit(0);
-            w.setWaterAmbientSpawnLimit(0);
-            w.setWaterAnimalSpawnLimit(0);
+            for(SpawnCategory category : SpawnCategory.values()) {
+                w.setSpawnLimit(category,0);
+            }
         }
     }
     @Override
@@ -56,13 +56,12 @@ public class BieliauskuTaure2 extends JavaPlugin {
     }
     private void registerCommands()
     {
-        this.getCommand("team").setExecutor(new TeamCommand());
-        this.getCommand("minigame").setExecutor(new MinigameCommand());
-        this.getCommand("debuglevel").setExecutor(new DebugLevelCommand());
-        this.getCommand("setrole").setExecutor(new SetRoleCommand());
-        this.getCommand("team").setExecutor(new TeamCommand());
+        Objects.requireNonNull(this.getCommand("team")).setExecutor(new TeamCommand());
+        Objects.requireNonNull(this.getCommand("minigame")).setExecutor(new MinigameCommand());
+        Objects.requireNonNull(this.getCommand("debuglevel")).setExecutor(new DebugLevelCommand());
+        Objects.requireNonNull(this.getCommand("setrole")).setExecutor(new SetRoleCommand());
 
-        this.getCommand("test").setExecutor(new TestCommand());
+        Objects.requireNonNull(this.getCommand("test")).setExecutor(new TestCommand());
     }
     private void registerGlobalListeners()
     {
