@@ -20,6 +20,7 @@ public class Participant extends BTPlayer implements ConfigurationSerializable
         put(PermissionType.SET_ROLE,false);
         put(PermissionType.PLACE_BLOCKS,false);
         put(PermissionType.DAMAGE_ENTITIES,false);
+        put(PermissionType.MANAGE_TEAMS,false);
     }};
     public Participant(UUID playerID,BTTeam team)
     {

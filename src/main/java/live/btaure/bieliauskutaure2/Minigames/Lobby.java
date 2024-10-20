@@ -134,4 +134,6 @@ public class Lobby extends Minigame implements Listener {
             return;
         e.setCancelled(true);
     }
+
+    /**trollage**/
 }

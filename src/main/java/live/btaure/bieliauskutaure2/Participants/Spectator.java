@@ -20,6 +20,7 @@ public class Spectator extends BTPlayer
         put(PermissionType.SET_ROLE,false);
         put(PermissionType.PLACE_BLOCKS,false);
         put(PermissionType.DAMAGE_ENTITIES,false);
+        put(PermissionType.MANAGE_TEAMS,false);
     }};
     public Spectator(UUID playerID,BTTeam team)
     {

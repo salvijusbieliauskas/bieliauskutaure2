@@ -4,5 +4,6 @@ public enum PermissionType {
     BREAK_BLOCKS,
     SET_ROLE,
     PLACE_BLOCKS,
-    DAMAGE_ENTITIES
+    DAMAGE_ENTITIES,
+    MANAGE_TEAMS
 }

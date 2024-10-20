@@ -60,6 +60,7 @@ public class BieliauskuTaure2 extends JavaPlugin {
         this.getCommand("minigame").setExecutor(new MinigameCommand());
         this.getCommand("debuglevel").setExecutor(new DebugLevelCommand());
         this.getCommand("setrole").setExecutor(new SetRoleCommand());
+        this.getCommand("team").setExecutor(new TeamCommand());
 
         this.getCommand("test").setExecutor(new TestCommand());
     }

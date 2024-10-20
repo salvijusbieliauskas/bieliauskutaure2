@@ -37,6 +37,12 @@ public abstract class BTPlayer implements ConfigurationSerializable {
     {
         return Bukkit.getPlayer(this.getID());
     }
+
+    public void setTeam(BTTeam team)
+    {
+        this.team = team;
+    }
+
     private BTTeam team = null;
     public BTTeam getTeam()
     {

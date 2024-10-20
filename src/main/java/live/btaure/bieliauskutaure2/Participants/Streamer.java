@@ -15,6 +15,7 @@ public class Streamer extends BTPlayer{
         put(PermissionType.SET_ROLE,true);
         put(PermissionType.PLACE_BLOCKS,true);
         put(PermissionType.DAMAGE_ENTITIES,true);
+        put(PermissionType.MANAGE_TEAMS,true);
     }};
 
     public Streamer(UUID playerID)
