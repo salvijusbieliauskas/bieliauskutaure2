@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ public class Lobby extends Minigame implements Listener {
         if(!super.performChecks(player))
             return;
         Player bukkitPlayer = player.getPlayer();
-        bukkitPlayer.getActivePotionEffects().clear();
+        for(PotionEffect pe : bukkitPlayer.getActivePotionEffects())
+            bukkitPlayer.removePotionEffect(pe.getType());
         bukkitPlayer.setGameMode(super.getGameMode());
     }
 
@@ -110,7 +112,10 @@ public class Lobby extends Minigame implements Listener {
     public void onEntityDamage(EntityDamageEvent e)
     {
         if(e.getEntity() instanceof Player)
+        {
             e.setCancelled(true);
+            e.setDamage(0);
+        }
     }
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent e)
@@ -118,12 +123,14 @@ public class Lobby extends Minigame implements Listener {
         if(!(e.getDamager() instanceof Player damager))
         {
             e.setCancelled(true);
+            e.setDamage(0);
             return;
         }
         if(PlayerManager.getInstance().getBTPlayer(damager.getUniqueId()).getPermissions().get(PermissionType.DAMAGE_ENTITIES))
         {
             return;
         }
+        e.setDamage(0);
         e.setCancelled(true);
         return;
     }

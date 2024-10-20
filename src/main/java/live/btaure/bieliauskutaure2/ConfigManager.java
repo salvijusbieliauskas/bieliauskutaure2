@@ -2,7 +2,6 @@ package live.btaure.bieliauskutaure2;
 
 import live.btaure.bieliauskutaure2.Participants.BTPlayer;
 import live.btaure.bieliauskutaure2.Participants.BTTeam;
-import live.btaure.bieliauskutaure2.Participants.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +30,7 @@ public class ConfigManager
             return new ArrayList<BTTeam>();
         return (List<BTTeam>) plugin.getConfig().get("teams");
     }
-    private void save()
+    public void save()
     {
         plugin.saveConfig();
         Logger.getInstance().info("Configuration updated and saved");

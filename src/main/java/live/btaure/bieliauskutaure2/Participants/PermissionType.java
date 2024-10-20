@@ -5,5 +5,5 @@ public enum PermissionType {
     SET_ROLE,
     PLACE_BLOCKS,
     DAMAGE_ENTITIES,
-    MANAGE_TEAMS
+    BYPASS_CHAT
 }

@@ -27,7 +27,7 @@ public class BieliauskuTaure2 extends JavaPlugin {
 
         MinigameManager.getInstance();//ensures that lobby is loaded as a minigame
 
-        Logger.getInstance().success("prisitriedziau ziauriai (plugin uzsikrove)");
+        Logger.getInstance().success("plugin uzsikrove");
     }
     private void preloadWorlds()
     {

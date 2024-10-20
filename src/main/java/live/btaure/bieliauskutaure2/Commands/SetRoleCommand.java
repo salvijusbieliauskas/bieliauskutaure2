@@ -50,7 +50,7 @@ public class SetRoleCommand implements CommandExecutor
             case "transliuotojas":
             case "translator":
             case "streamer":
-                PlayerManager.getInstance().addBTPlayer(new Streamer(referencedPlayer.getID()), AddModeType.REPLACE);
+                PlayerManager.getInstance().addBTPlayer(new Streamer(referencedPlayer.getID(),true), AddModeType.REPLACE);
                 commandSender.sendMessage(ChatColor.GREEN + "Meooowww! Pakeitei zaidejo role i [REDACTED] ! Sveikinu! Tu tai padarei! Ar tu dabar patenkintas savimi? :DDDD");
                 return true;
             case "stebėtojas":

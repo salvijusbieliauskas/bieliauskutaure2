@@ -1,7 +1,7 @@
 main: live.btaure.bieliauskutaure2.BieliauskuTaure2
 version: 1.0
 name: 'MCBieliauskuTaure2'
-api-version: '1.16'
+api-version: '1.21.1'
 commands:
   team:
     description: Can be used to modify and add teams

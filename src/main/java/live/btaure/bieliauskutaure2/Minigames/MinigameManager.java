@@ -1,12 +1,10 @@
 package live.btaure.bieliauskutaure2.Minigames;
 
-import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import live.btaure.bieliauskutaure2.BieliauskuTaure2;
-import live.btaure.bieliauskutaure2.Participants.Logger;
+import live.btaure.bieliauskutaure2.Logger;
 import live.btaure.bieliauskutaure2.Participants.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.event.Listener;
 
 public class MinigameManager
 {

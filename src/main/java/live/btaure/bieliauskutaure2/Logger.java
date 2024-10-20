@@ -1,5 +1,6 @@
-package live.btaure.bieliauskutaure2.Participants;
+package live.btaure.bieliauskutaure2;
 
+import live.btaure.bieliauskutaure2.Participants.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -60,7 +61,7 @@ public class Logger
      */
     public void success(String message)
     {
-        Bukkit.getLogger().log(Level.INFO, ChatColor.GREEN+prefix+message);
+        Bukkit.getLogger().log(Level.INFO, prefix+message);
         PlayerManager.getInstance().broadcastDebug(ChatColor.GREEN+prefix+message,0);
     }
 }

@@ -15,12 +15,19 @@ public class Streamer extends BTPlayer{
         put(PermissionType.SET_ROLE,true);
         put(PermissionType.PLACE_BLOCKS,true);
         put(PermissionType.DAMAGE_ENTITIES,true);
-        put(PermissionType.MANAGE_TEAMS,true);
+        put(PermissionType.BYPASS_CHAT,true);
     }};
 
-    public Streamer(UUID playerID)
+    public boolean isSoundEffectsMuted()
+    {
+        return soundEffectsMuted;
+    }
+
+    private boolean soundEffectsMuted;
+    public Streamer(UUID playerID, boolean muted)
     {
         super(playerID, null, "Transliuotojas", ChatColor.DARK_RED);
+        soundEffectsMuted = muted;
     }
 
     @Override
@@ -32,13 +39,14 @@ public class Streamer extends BTPlayer{
     //<editor-fold desc="Serialization">
     public Streamer(Map<String,Object> map)
     {
-        this(UUID.fromString((String) map.get("UUID")));
+        this(UUID.fromString((String) map.get("UUID")), (Boolean) map.get("muted"));
     }
     @Override
     public @NotNull Map<String, Object> serialize()
     {
         Map<String,Object> map = new HashMap<>();
         map.put("UUID",super.getID().toString());
+        map.put("muted",soundEffectsMuted);
         return map;
     }
 
