@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="bieliauskutaure2:jar">
-    <output-path>Z:/Servers/BieliauskuTaure2Server/plugins</output-path>
+    <output-path>Z:/Projects/bieliauskutaure2/BieliauskuTaure2Server/plugins</output-path>
     <root id="archive" name="bieliauskutaure2.jar">
       <element id="module-output" name="bieliauskutaure2" />
     </root>
