@@ -117,6 +117,7 @@ public class TestCommand implements CommandExecutor {
 
             Entity block = (Entity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
             commandSender.sendMessage("armor stand now");
+            player.setPassenger(block);
 
         }
         return true;
