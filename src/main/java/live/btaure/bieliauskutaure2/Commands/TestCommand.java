@@ -10,6 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -102,7 +104,21 @@ public class TestCommand implements CommandExecutor {
             commandSender.sendMessage(strings[1]+'L');
             commandSender.sendMessage(ChatColor.BOLD+strings[1]+ChatColor.RESET+'L');
         }
+        else if(strings[0].equalsIgnoreCase("block"))
+        {
+            // make command sender into block / block entity
+            Player player = (Player) commandSender;
+            for(Player otherPlayer : Bukkit.getOnlinePlayers())
+            {
+                otherPlayer.hidePlayer(BieliauskuTaure2.getPlugin(BieliauskuTaure2.class), player);
 
+            }
+            commandSender.sendMessage("should be hidden from other players now");
+
+            Entity block = (Entity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+            commandSender.sendMessage("armor stand now");
+
+        }
         return true;
     }
 }

@@ -58,7 +58,7 @@
                                     <shadedPattern>live.btaure.bieliauskutaure2.customblockdata</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <outputFile>Z:\Projects\bieliauskutaure2\BieliauskuTaure2Server\plugins\${project.artifactId}-${project.version}.jar</outputFile>
+                            <outputFile>C:\Projects\BT2\${project.artifactId}-${project.version}.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
