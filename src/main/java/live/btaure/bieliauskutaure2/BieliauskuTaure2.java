@@ -36,9 +36,13 @@ public class BieliauskuTaure2 extends JavaPlugin {
         new Parkour();//sitas sudas padaro kad static World uzsikrautu. cj nera butina nes anyway yra init faze nebent kad cia mobs isjungt
         for(World w : Bukkit.getServer().getWorlds())
         {
-            for(SpawnCategory category : SpawnCategory.values()) {
-                w.setSpawnLimit(category,0);
-            }
+            w.setSpawnLimit(SpawnCategory.AMBIENT,0);
+            w.setSpawnLimit(SpawnCategory.ANIMAL,0);
+            w.setSpawnLimit(SpawnCategory.AXOLOTL,0);
+            w.setSpawnLimit(SpawnCategory.MONSTER,0);
+            w.setSpawnLimit(SpawnCategory.WATER_AMBIENT,0);
+            w.setSpawnLimit(SpawnCategory.WATER_ANIMAL,0);
+            w.setSpawnLimit(SpawnCategory.WATER_UNDERGROUND_CREATURE,0);
         }
     }
     @Override
