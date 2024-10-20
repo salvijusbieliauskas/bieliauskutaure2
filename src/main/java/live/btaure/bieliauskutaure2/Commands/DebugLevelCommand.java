@@ -55,8 +55,6 @@ public class DebugLevelCommand implements CommandExecutor
         commandSender.sendMessage(String.format("%1$smeow youw debug lewel had been setted to %2$s",ChatColor.LIGHT_PURPLE, debugLevel));
 
         return true;
-
-        //dj kakotojaz signing out
     }
 
 
