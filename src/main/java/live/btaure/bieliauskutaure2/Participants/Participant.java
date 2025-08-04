@@ -15,17 +15,35 @@ import java.util.UUID;
 @SerializableAs("Participant")
 public class Participant extends BTPlayer implements ConfigurationSerializable
 {
-    private static final HashMap<PermissionType,Boolean> permissions = new HashMap<>(){{
-        put(PermissionType.BREAK_BLOCKS,false);
-        put(PermissionType.SET_ROLE,false);
-        put(PermissionType.PLACE_BLOCKS,false);
-        put(PermissionType.DAMAGE_ENTITIES,false);
-        put(PermissionType.BYPASS_CHAT,false);
+    private static final HashMap<PermissionType, Boolean> permissions = new HashMap<>()
+    {{
+        put(PermissionType.BREAK_BLOCKS, false);
+        put(PermissionType.SET_ROLE, false);
+        put(PermissionType.PLACE_BLOCKS, false);
+        put(PermissionType.DAMAGE_ENTITIES, false);
+        put(PermissionType.BYPASS_CHAT, false);
     }};
-    public Participant(UUID playerID,BTTeam team)
+
+    public Participant(UUID playerID, BTTeam team)
     {
-        super(playerID,team, "Dalyvis", ChatColor.WHITE);
-        HashMap<PermissionType,Boolean> permissions = new HashMap<>();
+        super(playerID, team, "Dalyvis", ChatColor.WHITE);
+        HashMap<PermissionType, Boolean> permissions = new HashMap<>();
+    }
+
+    //<editor-fold desc="Serialization">
+    public Participant(Map<String, Object> map)
+    {
+        this(UUID.fromString((String) map.get("UUID")), (BTTeam) map.get("team"));
+    }
+
+    public static Participant valueOf(Map<String, Object> map)
+    {
+        return new Participant(map);
+    }
+
+    public static Participant deserialize(Map<String, Object> map)
+    {
+        return new Participant(map);
     }
 
     @Override
@@ -33,28 +51,14 @@ public class Participant extends BTPlayer implements ConfigurationSerializable
     {
         return permissions;
     }
-    //<editor-fold desc="Serialization">
-    public Participant(Map<String,Object> map)
-    {
-        this(UUID.fromString((String) map.get("UUID")),(BTTeam)map.get("team"));
-    }
+
     @Override
     public @NotNull Map<String, Object> serialize()
     {
-        Map<String,Object> map = new HashMap<>();
-        map.put("UUID",super.getID().toString());
-        map.put("team",super.getTeam());
+        Map<String, Object> map = new HashMap<>();
+        map.put("UUID", super.getID().toString());
+        map.put("team", super.getTeam());
         return map;
-    }
-
-    public static Participant valueOf(Map<String,Object> map)
-    {
-        return new Participant(map);
-    }
-
-    public static Participant deserialize(Map<String,Object> map)
-    {
-        return new Participant(map);
     }
     //</editor-fold>
 }

@@ -13,25 +13,23 @@ import java.util.UUID;
 
 public class SetRoleCommand implements CommandExecutor
 {
-
-
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String name, @NotNull String[] args)
     {
-        if(!(commandSender instanceof ConsoleCommandSender))
+        if (!(commandSender instanceof ConsoleCommandSender))
         {
             UUID commandSenderUUID = ((Player) commandSender).getUniqueId();
             BTPlayer player = PlayerManager.getInstance().getBTPlayer(commandSenderUUID);
             boolean setRolePermission = player.getPermissions().get(PermissionType.SET_ROLE);
 
-            if(!(setRolePermission))
+            if (!(setRolePermission))
             {
-                commandSender.sendMessage(ChatColor.RED + "RAWR! tu netuwi pewmission sitai komandai >:( (kaina pewmissionam: 1000 euwu i mano banko saskaita");
+                commandSender.sendMessage(ChatColor.RED + "RAWR! tu netuwi pewmission sitai komandai >:(");
                 return false;
             }
         }
 
-        if(args.length < 2)
+        if (args.length < 2)
         {
             commandSender.sendMessage(ChatColor.RED + "RAWR! tu pwivalai iwesti zaidejo vawda iw wole! >:(");
             return false;
@@ -39,18 +37,18 @@ public class SetRoleCommand implements CommandExecutor
 
         BTPlayer referencedPlayer = PlayerManager.getInstance().getBTPlayer(args[0]);
 
-        if(referencedPlayer == null)
+        if (referencedPlayer == null)
         {
             commandSender.sendMessage(ChatColor.RED + "RAWR! ivestas zaidejas neegzistuoja! :/");
             return false;
         }
 
-        switch(args[1].toLowerCase())
+        switch (args[1].toLowerCase())
         {
             case "transliuotojas":
             case "translator":
             case "streamer":
-                PlayerManager.getInstance().addBTPlayer(new Streamer(referencedPlayer.getID(),true), AddModeType.REPLACE);
+                PlayerManager.getInstance().addBTPlayer(new Streamer(referencedPlayer.getID(), true), AddModeType.REPLACE);
                 commandSender.sendMessage(ChatColor.GREEN + "Meooowww! Pakeitei zaidejo role i [REDACTED] ! Sveikinu! Tu tai padarei! Ar tu dabar patenkintas savimi? :DDDD");
                 return true;
             case "stebėtojas":

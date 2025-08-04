@@ -3,7 +3,8 @@ package live.btaure.bieliauskutaure2.Participants;
 /**
  * Enum which represents various ways to register a new player
  */
-public enum AddModeType {
+public enum AddModeType
+{
     /**
      * Adds the player without performing any checks
      */

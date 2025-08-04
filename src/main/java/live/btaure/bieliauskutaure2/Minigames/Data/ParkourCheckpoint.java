@@ -20,6 +20,7 @@ public class ParkourCheckpoint implements ConfigurationSerializable
     public final Location checkpointLocation;
     public final List<PotionEffect> activePotionEffects;
     public final List<Material> bannedBlockTypes;
+
     public ParkourCheckpoint(int index, Location teleportTarget, Location checkpointLocation, List<PotionEffect> activePotionEffects, List<Material> bannedBlockTypes)
     {
         this.index = index;
@@ -28,6 +29,7 @@ public class ParkourCheckpoint implements ConfigurationSerializable
         this.activePotionEffects = activePotionEffects;
         this.bannedBlockTypes = bannedBlockTypes;
     }
+
     public ParkourCheckpoint(Map<String, Object> map)
     {
         this.index = (Integer) map.get("index");
@@ -36,37 +38,40 @@ public class ParkourCheckpoint implements ConfigurationSerializable
         this.activePotionEffects = (ArrayList<PotionEffect>) map.get("potionEffects");
         ArrayList<String> bannedMaterialsString = (ArrayList<String>) map.get("bannedBlocks");
         this.bannedBlockTypes = new ArrayList<>();
-        for(String str : bannedMaterialsString)
+        for (String str : bannedMaterialsString)
         {
             this.bannedBlockTypes.add(Material.valueOf(str));
         }
     }
-    @Override
-    public @NotNull Map<String, Object> serialize()
-    {
-        HashMap<String,Object> serialized = new HashMap<>();
-        serialized.put("index",index);
-        serialized.put("target",teleportTarget);
-        serialized.put("location",checkpointLocation);
-        serialized.put("potionEffects",activePotionEffects);
-        ArrayList<String> serializableBannedBlockTypes = new ArrayList<>();
-        if(!(this.bannedBlockTypes ==null))
-        {
-            for(Material mat : bannedBlockTypes)
-            {
-                serializableBannedBlockTypes.add(mat.toString());
-            }
-        }
-        serialized.put("bannedBlocks",serializableBannedBlockTypes);
 
-        return serialized;
-    }
     public static ParkourCheckpoint valueOf(Map<String, Object> map)
     {
         return new ParkourCheckpoint(map);
     }
+
     public static ParkourCheckpoint deserialize(Map<String, Object> map)
     {
         return new ParkourCheckpoint(map);
+    }
+
+    @Override
+    public @NotNull Map<String, Object> serialize()
+    {
+        HashMap<String, Object> serialized = new HashMap<>();
+        serialized.put("index", index);
+        serialized.put("target", teleportTarget);
+        serialized.put("location", checkpointLocation);
+        serialized.put("potionEffects", activePotionEffects);
+        ArrayList<String> serializableBannedBlockTypes = new ArrayList<>();
+        if (!(this.bannedBlockTypes == null))
+        {
+            for (Material mat : bannedBlockTypes)
+            {
+                serializableBannedBlockTypes.add(mat.toString());
+            }
+        }
+        serialized.put("bannedBlocks", serializableBannedBlockTypes);
+
+        return serialized;
     }
 }

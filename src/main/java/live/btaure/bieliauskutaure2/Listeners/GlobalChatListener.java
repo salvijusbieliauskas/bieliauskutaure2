@@ -6,7 +6,6 @@ import live.btaure.bieliauskutaure2.Participants.PermissionType;
 import live.btaure.bieliauskutaure2.Participants.PlayerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Singleton that handles everything associated with chat.
@@ -14,23 +13,26 @@ import org.jetbrains.annotations.NotNull;
 public class GlobalChatListener implements Listener
 {
     private static GlobalChatListener globalChatListenerInstance = null;
+    private final boolean chatEnabled = true;
+
     private GlobalChatListener()
     {
     }
+
     public GlobalChatListener getInstance()
     {
-        if(globalChatListenerInstance == null)
+        if (globalChatListenerInstance == null)
             globalChatListenerInstance = new GlobalChatListener();
         return globalChatListenerInstance;
     }
-    private boolean chatEnabled = true;
+
     @EventHandler
     public void onPlayerChat(AsyncChatEvent e)
     {
-        if(chatEnabled)
+        if (chatEnabled)
             return;
         BTPlayer player = PlayerManager.getInstance().getBTPlayer(e.getPlayer());
-        if(player.getPermissions().get(PermissionType.BYPASS_CHAT))
+        if (player.getPermissions().get(PermissionType.BYPASS_CHAT))
             return;
         e.setCancelled(true);
     }

@@ -6,41 +6,43 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class MinigameCommand  implements CommandExecutor {
+public class MinigameCommand implements CommandExecutor
+{
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
     {
-        if(!(commandSender instanceof ConsoleCommandSender) && !((Player)commandSender).isOp())
+        if (!(commandSender instanceof ConsoleCommandSender) && !commandSender.isOp())
             return true;//net neraso usage.
-        if(args.length==0 || args[0].equalsIgnoreCase("info"))
+        if (args.length == 0 || args[0].equalsIgnoreCase("info"))
         {
-            commandSender.sendMessage("Minigame manager info: "+MinigameManager.getInstance().toString());
+            commandSender.sendMessage("Minigame manager info: " + MinigameManager.getInstance().toString());
             return true;
         }
-        switch(args[0].toLowerCase())
+        switch (args[0].toLowerCase())
         {
             case "advance":
                 return MinigameManager.getInstance().advance();
             case "init":
-                if(args.length==1)
+                if (args.length == 1)
                 {
                     commandSender.sendMessage("Minigame to initialize not specified.");
                     return false;
                 }
-                String fixedName = args[1].toUpperCase().substring(0,1)+args[1].toLowerCase().substring(1);
+                String fixedName = args[1].toUpperCase().charAt(0) + args[1].toLowerCase().substring(1);
                 Class c = Minigame.getMinigameClass(fixedName);
-                if(c == null)
+                if (c == null)
                 {
                     commandSender.sendMessage("Minigame to initialize not found.");
                     return false;
                 }
                 Object instance = null;
-                try {
+                try
+                {
                     instance = c.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
+                } catch (InstantiationException | IllegalAccessException e)
+                {
                     commandSender.sendMessage("Failed to create a minigame instance.");
                     return false;
                 }

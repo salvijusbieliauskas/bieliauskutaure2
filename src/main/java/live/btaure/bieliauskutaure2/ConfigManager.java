@@ -9,48 +9,54 @@ import java.util.List;
 
 public class ConfigManager
 {
-    private BieliauskuTaure2 plugin;
-    private static ConfigManager configManagerInstance  = null;
+    private static ConfigManager configManagerInstance = null;
+    private final BieliauskuTaure2 plugin;
+
     private ConfigManager()
     {
         plugin = BieliauskuTaure2.getPlugin(BieliauskuTaure2.class);
     }
+
     public static ConfigManager getInstance()
     {
-        if(configManagerInstance == null)
+        if (configManagerInstance == null)
         {
             configManagerInstance = new ConfigManager();
         }
         return configManagerInstance;
     }
+
     public List<BTTeam> getTeams() //TODO:isitikinti kad sitas(ir kitas get) ass metodas nethrowins exception
     {
         Object obj = plugin.getConfig().get("teams");
-        if(obj == null)
+        if (obj == null)
             return new ArrayList<BTTeam>();
         return (List<BTTeam>) plugin.getConfig().get("teams");
     }
+
+    public void setTeams(Collection<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
+    {
+        plugin.getConfig().set("teams", new ArrayList<BTTeam>(teams));
+        save();
+    }
+
     public void save()
     {
         plugin.saveConfig();
         Logger.getInstance().info("Configuration updated and saved");
     }
+
     public List<BTPlayer> getBTPlayers()
     {
         Object obj = plugin.getConfig().get("BTPlayers");
-        if(obj == null)
+        if (obj == null)
             return new ArrayList<BTPlayer>();
         return (List<BTPlayer>) obj;
-    }
-    public void setTeams(Collection<BTTeam> teams)//TODO:sita dalis ziauriai neoptimized nes kiekviena karta kai kazkurio player type bus pakeistas, kiekvienas player bus serialized per nauja
-    {
-        plugin.getConfig().set("teams",new ArrayList<BTTeam>(teams));
-        save();
     }
 
     public void setNonParticipants(Collection<BTPlayer> BTPlayers)
     {
-        plugin.getConfig().set("BTPlayers",new ArrayList<BTPlayer>(BTPlayers));
+        plugin.getConfig().set("BTPlayers", new ArrayList<BTPlayer>(BTPlayers));
         save();
     }
 

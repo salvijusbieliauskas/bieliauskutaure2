@@ -16,18 +16,6 @@ public abstract class Minigame implements Listener
 {
     public final boolean allowsDisconnect;
     public final String name;
-
-    public GameMode getGameMode()
-    {
-        return gameMode;
-    }
-    public abstract World getWorld();
-
-    public void setGameMode(GameMode gameMode)
-    {
-        this.gameMode = gameMode;
-    }
-
     private GameMode gameMode;
 
     protected Minigame(boolean allowsDisconnect, String name, GameMode gameMode)
@@ -36,8 +24,37 @@ public abstract class Minigame implements Listener
         this.name = name;
         this.gameMode = gameMode;
     }
+
+    public static Class getMinigameClass(String name)
+    {
+        try
+        {
+            Class aClass = Class.forName("live.btaure.bieliauskutaure2.Minigames." + name);
+            if (aClass.getSuperclass() != null && aClass.getSuperclass().getName().equals(Minigame.class.getName()))
+                return aClass;
+            return null;
+        } catch (ClassNotFoundException e)
+        {
+            return null;
+        }
+    }
+
+    public GameMode getGameMode()
+    {
+        return gameMode;
+    }
+
+    public void setGameMode(GameMode gameMode)
+    {
+        this.gameMode = gameMode;
+    }
+
+    public abstract World getWorld();
+
     public abstract Location getSpectatorSpawnLocation();
+
     public abstract void applySettings(BTPlayer player);
+
     public void applySettings(Player player)
     {
         applySettings(PlayerManager.getInstance().getBTPlayer(player));
@@ -45,46 +62,42 @@ public abstract class Minigame implements Listener
 
     /**
      * puts the given player in the appropriate location(for example, if the minigame is boatrace, the player would be put in a boat at the starting line)
+     *
      * @param player player to teleport
      */
     public abstract void teleportParticipant(BTPlayer player);
 
     /**
      * teleports the given player to the location provided by getSpectatorSpawnLocation()
+     *
      * @param player player to teleport
      */
     public void teleportSpectator(BTPlayer player)
     {
         player.teleport(getSpectatorSpawnLocation());
     }
+
     public abstract boolean init();
+
     public abstract boolean begin();
+
     public abstract boolean end();
+
     public abstract List<String> getScoreboardContent(UUID playerID);
+
     /**
      * Checks whether the provided player should have minigame-specific settings applied to them
+     *
      * @param player player to check
      * @return true if player should receive minigame-specific settings, false otherwise
      */
     public boolean performChecks(BTPlayer player)
     {
-        if(!player.isOnline())
+        if (!player.isOnline())
             return false;
-        if(!(player instanceof Participant))
-            return false;
-        return true;
+        return player instanceof Participant;
     }
-    public static Class getMinigameClass(String name)
-    {
-        try {
-            Class aClass = Class.forName("live.btaure.bieliauskutaure2.Minigames."+name);
-            if(aClass.getSuperclass() != null && aClass.getSuperclass().getName().equals(Minigame.class.getName()))
-                return aClass;
-            return null;
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
+
     @Override
     public String toString()
     {
