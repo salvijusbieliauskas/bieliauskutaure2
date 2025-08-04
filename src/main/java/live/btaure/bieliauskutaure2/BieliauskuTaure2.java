@@ -35,7 +35,7 @@ public class BieliauskuTaure2 extends JavaPlugin
     private void preloadWorlds()
     {
         new Lobby();
-        new Parkour();//sitas padaro kad static World uzsikrautu. cj nera butina nes anyway yra init faze nebent kad cia mobs isjungt
+        new Parkour();//sitas padaro kad static World uzsikrautu. tikriausiai nera butina nes yra init faze nebent kad cia mobs isjungt
         for (World w : Bukkit.getServer().getWorlds())
         {
             w.setSpawnLimit(SpawnCategory.AMBIENT, 0);
